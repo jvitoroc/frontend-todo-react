@@ -1,0 +1,100 @@
+.TodoList{
+    margin: 0 auto;
+    max-width: 700px;
+    font-family: Roboto;
+    font-size: 24px;
+    color: #8d8d8d;
+}
+
+.todo-list-title{
+    font-size: 35px;
+    margin-left: 15px;
+    height: 215px;
+    position: relative;
+}
+
+.todo-list-title > div{
+    max-height: 215px;
+    position: absolute;
+    overflow: hidden;
+    bottom: 0;
+}
+
+.actions{
+    display: flex;
+}
+
+.action-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.action-button.disabled{
+    cursor: not-allowed;
+}
+
+.action-button > svg{
+    color: rgb(128, 128, 128);
+}
+
+.action-button.disabled > svg{
+    color: rgb(220, 220, 220);
+}
+
+.action-button:not(.disabled):hover{
+    background: rgb(245, 245, 245);
+}
+
+:global(.item-enter){
+    max-height: 0px;
+    background-color: rgb(240, 240, 240);
+}
+
+:global(.item-enter-active){
+    max-height: 500px;
+    background-color: white;
+    transition: 1s ease-out;
+}
+
+:global(.item-exit){
+    opacity: 1;
+    max-height: 100px;
+}
+
+:global(.item-exit-active){
+    opacity: 0;
+    max-height: 0px;
+    transition: 0.4s ease-out;
+}
+
+:global(.fade-enter) .TodoList{
+    opacity: 0;
+    transform: translateY(100%);
+}
+
+:global(.fade-enter-active) .TodoList{
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+:global(.fade-exit) .TodoList{
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+:global(.fade-exit-active) .TodoList{
+    opacity: 0;
+    transform: translateY(-100%);
+}
+
+:global(.fade-enter-active) .TodoList,
+:global(.fade-exit-active) .TodoList{
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}

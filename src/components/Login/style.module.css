@@ -1,0 +1,68 @@
+.Login{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Roboto;
+    font-weight: 300;
+}
+
+.input-wrapper{
+    position: relative;
+}
+
+.input{
+    margin-top: 40px;
+    display: block;
+    border: none;
+    outline: none;
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 300;
+    color: rgb(100, 100, 100);
+    /* border-bottom: 2px solid rgb(192, 192, 192); */
+    background-color: rgb(245, 245, 245);
+}
+
+.input:focus{
+    background-color: rgb(240, 240, 240);
+    /* border-bottom: 2px solid rgb(128, 128, 128); */
+}
+
+.input-label{
+    position: absolute;
+    top: 0px;
+    left: 2px;
+    font-size: 24px;
+    transition: 0.2s;
+    color: rgb(150, 150, 150);
+    user-select: none;
+}
+
+.input:focus ~ .input-label,
+.input:valid ~ .input-label,
+.input:placeholder-shown ~ .input-label,
+.input:-webkit-autofill ~ .input-label{
+    top: -25px;
+    font-size: 16px;
+}
+
+.submit-button{
+    background: none;
+    border: none;
+    outline: none;
+    text-align: center;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 20px;
+    display: block;
+    width: 100%;
+    padding: 7px;
+    margin-top: 5px;
+    color: #4d4d4d;
+    cursor: pointer;
+}
+
+.submit-button:hover{
+    background-color: rgb(235, 235, 235);
+}
