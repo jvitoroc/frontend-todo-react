@@ -23,7 +23,6 @@ class Login extends Component {
 			async response => {
                 let json = await response.json();
                 if(response.ok === false){
-                    console.log(json.message);
                     setErrors({general: json.message});
                     setSubmitting(false);
                 }

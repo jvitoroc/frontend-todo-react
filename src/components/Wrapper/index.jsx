@@ -3,34 +3,35 @@ import TodoList from '../TodoList';
 import Login from '../Login';
 import './style.css'
 import {Route, Switch, withRouter} from 'react-router-dom';
-import {CSSTransition} from 'react-transition-group';
+import {TransitionGroup, CSSTransition} from 'react-transition-group';
 
 const routes = [
-    { path: '/login', name: 'Login', Component: Login },
-    { path: '/todos/:parentTodoId?', name: 'Todos', Component: TodoList }
-]
-  
+    { path: '/login', Component: Login },
+    { path: '/todos/:parentTodoId?', Component: TodoList }
+  ]
+
 class Wrapper extends Component {
     render() { 
         return (
-            <>
-                {routes.map(({ path, Component }) => (
-                    <Route key={path} exact path={path}>
-                    {({ match }) => (
-                        <CSSTransition
-                            in={match != null}
-                            timeout={300}
-                            classNames="page"
-                            // unmountOnExit
-                        >
-                            <div className="page">
-                                <Component />
-                            </div>
-                        </CSSTransition>
-                    )}
-                    </Route>
-                ))}
-            </>
+            <TransitionGroup>
+                <CSSTransition
+                    key={this.props.location.key}
+                    classNames="page"
+                    timeout={300}
+                >
+                    <Switch>
+                        {routes.map(({ path, Component }) => (
+                            <Route key={path} exact path={path}>
+                                {() => (
+                                    <div className="page">
+                                        <Component />
+                                    </div>
+                                )}
+                            </Route>
+                        ))}
+                    </Switch>
+                </CSSTransition>
+            </TransitionGroup>
         );
     }
 }
