@@ -73,7 +73,7 @@ export function fetchTodos(parentTodoId) {
 
 		const init = {
 			method: 'GET',
-			headers: {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIn0.bxgpPhzLpqNQYrGRnzFnh5Kd1gX-NCfK8K_6y7mDzZ0'}
+			headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
 		}
 
 		return fetch(parentTodoId ? `http://localhost:8000/todo/${parentTodoId}` : 'http://localhost:8000/todo/', init)
@@ -98,7 +98,7 @@ export function createTodo(parentTodoId, description) {
 			method: 'POST',
 			body: JSON.stringify({description}),
 			headers: {
-				'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIn0.bxgpPhzLpqNQYrGRnzFnh5Kd1gX-NCfK8K_6y7mDzZ0',
+				'Authorization': 'Bearer ' + localStorage.getItem("token"),
 				'Content-Type': 'application/json'
 			}
 		}
@@ -116,7 +116,7 @@ export function updateTodo(id, todo) {
 			method: 'PATCH',
 			body: JSON.stringify(todo),
 			headers: {
-				'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIn0.bxgpPhzLpqNQYrGRnzFnh5Kd1gX-NCfK8K_6y7mDzZ0',
+				'Authorization': 'Bearer ' + localStorage.getItem("token"),
 				'Content-Type': 'application/json'
 			}
 		}
@@ -135,7 +135,7 @@ export function deleteTodo(id) {
 		const init = {
 			method: 'DELETE',
 			headers: {
-				'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIn0.bxgpPhzLpqNQYrGRnzFnh5Kd1gX-NCfK8K_6y7mDzZ0',
+				'Authorization': 'Bearer ' + localStorage.getItem("token"),
 				'Content-Type': 'application/json'
 			}
 		}
@@ -163,7 +163,7 @@ export function deleteSelectedTodos() {
 			method: 'DELETE',
 			body: JSON.stringify({ids}),
 			headers: {
-				'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIn0.bxgpPhzLpqNQYrGRnzFnh5Kd1gX-NCfK8K_6y7mDzZ0',
+				'Authorization': 'Bearer ' + localStorage.getItem("token"),
 				'Content-Type': 'application/json'
 			}
 		}
@@ -176,3 +176,25 @@ export function deleteSelectedTodos() {
 		)
 	}
 }
+
+// export function login(username, password) {
+// 	return function (dispatch) {
+// 		const init = {
+// 			method: 'POST',
+// 			body: JSON.stringify({username, password}),
+// 			headers: {'Content-Type': 'application/json'}
+// 		}
+
+// 		return fetch('http://localhost:8000/user/session', init)
+// 		.then(
+// 			response => {
+// 				return response.json()
+// 			}
+// 		)
+// 		.then(
+// 			json => {
+// 				dispatch(loginSucessfull(json))
+// 			}
+// 		)
+// 	}
+// }
