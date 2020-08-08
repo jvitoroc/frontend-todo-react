@@ -32,10 +32,16 @@
 }
 
 .text{
-    word-wrap: break-word;
-    word-break: break-all;
     display: flex;
     align-items: center;
+    width: calc(100% - 30px);
+    margin-left: 20px;
+}
+
+.text > div{
+    word-wrap: break-word;
+    word-break: break-all;
+    outline: none;
 }
 
 .check-icon{
@@ -55,10 +61,4 @@
 
 .check-icon.checked > svg{
     color: rgb(114, 114, 114);
-}
-
-.text{
-    width: calc(100% - 30px);
-    margin-left: 20px;
-    outline: none;
 }

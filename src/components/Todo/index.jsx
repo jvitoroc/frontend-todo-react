@@ -7,22 +7,22 @@ import {MdEdit, MdDelete} from 'react-icons/md'
 
 function setEndOfContenteditable(contentEditableElement)
 {
-    var range,selection;
-    if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
+    var range, selection;
+    if(document.createRange)
     {
-        range = document.createRange();//Create a range (a range is a like the selection but invisible)
-        range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
-        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-        selection = window.getSelection();//get the selection object (allows you to change selection)
-        selection.removeAllRanges();//remove any selections already made
-        selection.addRange(range);//make the range you have just created the visible selection
+        range = document.createRange();
+        range.selectNodeContents(contentEditableElement);
+        range.collapse(false);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
     }
-    else if(document.selection)//IE 8 and lower
+    else if(document.selection)
     { 
-        range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
-        range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
-        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-        range.select();//Select the range (make it the visible selection
+        range = document.body.createTextRange();
+        range.moveToElementText(contentEditableElement);
+        range.collapse(false);
+        range.select();
     }
 }
 
@@ -34,8 +34,10 @@ class Todo extends Component {
     }
 
     componentDidUpdate = () => {
-        if(this.props.editingDescription)
+        if(this.props.editingDescription){
             this.textRef.current.focus();
+            setEndOfContenteditable(this.textRef.current);
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState){
@@ -48,7 +50,7 @@ class Todo extends Component {
         return false;
     }
 
-    onEdit = (e) => {
+    onEdit = () => {
         this.props.toggleEditMode();
     }
 
@@ -66,10 +68,6 @@ class Todo extends Component {
     onKeyDown = (e) => {
         if(e.keyCode === 13)
             e.target.blur();
-    }
-
-    onTextInput = (e) => {
-        // e.target.innerHTML = e.target.textContent;
     }
 
     onContextMenu = (e) => {

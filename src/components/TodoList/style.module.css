@@ -74,28 +74,3 @@
     max-height: 0px;
     transition: 0.4s ease-out;
 }
-
-:global(.fade-enter) .TodoList{
-    opacity: 0;
-    transform: translateY(100%);
-}
-
-:global(.fade-enter-active) .TodoList{
-    opacity: 1;
-    transform: translateY(0%);
-}
-
-:global(.fade-exit) .TodoList{
-    opacity: 1;
-    transform: translateY(0%);
-}
-
-:global(.fade-exit-active) .TodoList{
-    opacity: 0;
-    transform: translateY(-100%);
-}
-
-:global(.fade-enter-active) .TodoList,
-:global(.fade-exit-active) .TodoList{
-    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
-}

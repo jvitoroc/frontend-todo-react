@@ -5,12 +5,10 @@ import {
 import {
     ADD_TODO,
     SELECT_TODO,
-	DELETE_TODO,
-	DELETE_SELECTED_TODOS,
-	EDIT_TODO_DESCRIPTION,
 	REQUEST_TODOS,
 	RECEIVE_TODOS,
-	TOGGLE_EDIT_MODE
+	TOGGLE_EDIT_MODE,
+	RECEIVE_USER_DATA
 } from './actions.js'
 
 function todos(state = {
@@ -71,13 +69,31 @@ function todos(state = {
 				parentTodoDescription: action.parentTodoDescription,
 				data: action.todos
 			}
+		case RECEIVE_USER_DATA:
+			return {
+				...state,
+				user: action.user
+			}
+		default:
+			return state
+    }
+} 
+
+function user(state = {}, action) {
+    switch (action.type) {
+		case RECEIVE_USER_DATA:
+			return {
+				...state,
+				user: action.user
+			}
 		default:
 			return state
     }
 } 
 
 const todoApp = combineReducers({
-    todos
+	todos,
+	user
 });
 
 export default todoApp

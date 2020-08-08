@@ -8,12 +8,7 @@ import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {withRouter} from 'react-router-dom';
 import classnames from 'classnames';
 
-
 class TodoList extends Component {
-    constructor(props){
-        super(props);
-    }
-
     componentDidMount = () => {
         this.props.fetchTodos(this.props.match.params.parentTodoId);
     }
@@ -42,8 +37,8 @@ class TodoList extends Component {
         let todos = this.props.todos.data.map((e) => {
                 return (
                     <CSSTransition
-                        in={false}
-                        appear={false}
+                        mountOnEnter
+                        unmountOnExit
                         key={e.todoId}
                         timeout={1000}
                         classNames={"item"}
@@ -51,7 +46,7 @@ class TodoList extends Component {
                         <Todo
                             {...e}
                             onOpen={()=>{this.openTodo(e.todoId)}}
-                            onSelect={()=>{this.props.onSelectTodo(e.todoId)}}
+                            onSelect={()=>{this.props.selectTodo(e.todoId)}}
                             onDelete={()=>{this.props.deleteTodo(e.todoId)}}
                             onComplete={()=>{this.props.completeTodo(e.todoId, !e.completed)}}
                             onEditDescription={(description)=>{this.props.editTodoDescription(e.todoId, description)}}
@@ -66,46 +61,33 @@ class TodoList extends Component {
         let goBackClasses = classnames(classes['action-button'], this.props.match.params.parentTodoId === undefined ? classes['disabled']:'')
 
         return (
-            // <SwitchTransition mode={'out-in'}>
-            //     <CSSTransition
-            //         key={todoTransitionKey}
-            //         addEndListener={(node, done) => {
-            //             node.addEventListener("transitionend", done, false);
-            //         }}
-            //         classNames="fade"
-            //     >
-                    <div>
-                        <div className={classes.TodoList}>
-                            <div className={classes['todo-list-title']}>
-                                <div>
-                                    {this.props.todos.parentTodoDescription}
-                                </div>
-                            </div>
-                            <div className={classes['actions']}>
-                                <div onClick={this.goBack} className={goBackClasses}> 
-                                    <MdArrowUpward size={24}/>
-                                </div>
-                                <div onClick={this.addTodo} className={classnames(classes['action-button'], classes['add-action-button'])}> 
-                                    <MdAdd size={24}/>
-                                </div>
-                                <div onClick={this.props.deleteSelectedTodos} className={deleteButtonClasses}> 
-                                    <MdDelete size={24}/>
-                                </div>
-                            </div>
-                            {
-                                this.props.todos.data.length > 0 ?
-                                    <TransitionGroup 
-                                        appear={false}
-                                        in={false}
-                                    >    
-                                        {todos}
-                                    </TransitionGroup>
-                                :null
-                            }
+            <div>
+                <div className={classes.TodoList}>
+                    <div className={classes['todo-list-title']}>
+                        <div>
+                            {this.props.todos.parentTodoDescription}
                         </div>
                     </div>
-            //     </CSSTransition>
-            // </SwitchTransition>
+                    <div className={classes['actions']}>
+                        <div onClick={this.goBack} className={goBackClasses}> 
+                            <MdArrowUpward size={24}/>
+                        </div>
+                        <div onClick={this.addTodo} className={classnames(classes['action-button'], classes['add-action-button'])}> 
+                            <MdAdd size={24}/>
+                        </div>
+                        <div onClick={this.props.deleteSelectedTodos} className={deleteButtonClasses}> 
+                            <MdDelete size={24}/>
+                        </div>
+                    </div>
+                        {
+                            this.props.todos.data.length > 0 ?
+                                <TransitionGroup>    
+                                    {todos}
+                                </TransitionGroup>
+                            :null
+                        }
+                </div>
+            </div>
         );
     }
 }
@@ -119,7 +101,7 @@ const mapDispatchToProps = dispatch => {
         completeTodo: (todoId, completed) => {
             dispatch(updateTodo(todoId, {completed}))
         },
-        onSelectTodo: todoId => {
+        selectTodo: todoId => {
             dispatch(selectTodo(todoId))
         },
         toggleEditMode: todoId => {

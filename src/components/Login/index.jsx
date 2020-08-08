@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import classes from './style.module.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import {withRouter} from 'react-router-dom';
-import classnames from 'classnames';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { loginSucessfull } from '../../actions';
 
 class Login extends Component {
     state = {  }
@@ -27,9 +28,8 @@ class Login extends Component {
                     setSubmitting(false);
                 }
                 else{
-                    localStorage.setItem("token", json.token);
-                    this.props.history.push("/todos");
-                    setSubmitting(false);
+                    localStorage.setItem("token", json.data.token);
+                    this.props.history.push('/todos');
                 }
 			}
         )
@@ -75,5 +75,19 @@ class Login extends Component {
         );
     }
 }
- 
-export default withRouter(Login);
+
+const mapStateToProps = (state) => {
+    return {...state};
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        loginSucessfull: (data) => {
+            dispatch(loginSucessfull(data))
+        }
+    }
+}
+
+const ConnectedLogin = connect(mapStateToProps, mapDispatchToProps)(Login);
+
+export default withRouter(ConnectedLogin);

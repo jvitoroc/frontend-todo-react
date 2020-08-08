@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Wrapper from './components/Wrapper';
+import App from './components/App';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux';
@@ -20,7 +20,7 @@ ReactDOM.render(
 	// <React.StrictMode>
 		<Provider store={store}>
 			<Router>
-				<Wrapper/>
+				<App/>
 			</Router>
 		</Provider>
 	// </React.StrictMode>,

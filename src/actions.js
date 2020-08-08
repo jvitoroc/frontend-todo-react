@@ -10,6 +10,7 @@ export const TOGGLE_EDIT_MODE = 'TOGGLE_EDIT_MODE'
 
 export const REQUEST_TODOS = 'REQUEST_TODOS'
 export const RECEIVE_TODOS = 'RECEIVE_TODOS'
+export const RECEIVE_USER_DATA = 'RECEIVE_USER_DATA'
 
 export const MODIFY_TODO = 'MODIFY_TODO'
 
@@ -43,6 +44,20 @@ export function requestTodos(parentTodoId) {
 
 export function modifyTodo(todoId, todo) {
 	return { type: MODIFY_TODO, todoId, todo }
+}
+
+export function receiveUserData(data) {
+	return {
+		type: RECEIVE_USER_DATA,
+		user: data
+	}
+}
+
+export function loginSucessfull(data) {
+	return function (dispatch) {
+		localStorage.setItem("token", data.token);
+		dispatch(receiveUserData(data.user));
+	}
 }
 
 export function receiveTodos(parentTodoId, json) {
