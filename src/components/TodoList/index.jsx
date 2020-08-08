@@ -4,18 +4,14 @@ import Todo from '../Todo';
 import { createTodo, selectTodo, deleteSelectedTodos, deleteTodo, fetchTodos, toggleEditMode, updateTodo } from '../../actions';
 import classes from './style.module.css';
 import {MdAdd, MdDelete, MdArrowUpward} from 'react-icons/md'
-import {SwitchTransition, TransitionGroup, CSSTransition} from 'react-transition-group';
+import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {withRouter} from 'react-router-dom';
 import classnames from 'classnames';
-import NewTodo from '../NewTodo';
+
 
 class TodoList extends Component {
     constructor(props){
         super(props);
-
-        this.state = {
-            showNewTodoForm: false
-        }
     }
 
     componentDidMount = () => {
@@ -28,7 +24,6 @@ class TodoList extends Component {
     }
 
     addTodo = () => {
-        // this.setState({showNewTodoForm: true});
         this.props.createTodo(this.props.match.params.parentTodoId, 'Describe your new todo');
     }
 
@@ -37,24 +32,22 @@ class TodoList extends Component {
     }
 
     goBack = () => {
-        let grandParentTodoId = this.props.todos.grandParentTodoId;
-        this.props.history.push(`/todos/${grandParentTodoId ? grandParentTodoId:''}`)
+        if(this.props.match.params.parentTodoId !== undefined){
+            let grandParentTodoId = this.props.todos.grandParentTodoId;
+            this.props.history.push(`/todos/${grandParentTodoId ? grandParentTodoId:''}`)
+        }
     }
 
     render() {
-        // if(this.state.showNewTodoForm){
-        //     return <NewTodo/>
-        // }
-
         let todos = this.props.todos.data.map((e) => {
                 return (
                     <CSSTransition
-                        in={true}
-                        appear={true}
+                        in={false}
+                        appear={false}
                         key={e.todoId}
                         timeout={1000}
                         classNames={"item"}
-                        >
+                    >
                         <Todo
                             {...e}
                             onOpen={()=>{this.openTodo(e.todoId)}}
@@ -72,17 +65,15 @@ class TodoList extends Component {
         let deleteButtonClasses = classnames(classes['action-button'], classes['delete-action-button'], !this.props.todos.allowDeletion ? classes['disabled']:'')
         let goBackClasses = classnames(classes['action-button'], this.props.match.params.parentTodoId === undefined ? classes['disabled']:'')
 
-        let todoTransitionKey = this.props.match.params.parentTodoId == null ? '':this.props.match.params.parentTodoId;
-
         return (
-            <SwitchTransition mode={'out-in'}>
-                <CSSTransition
-                    key={todoTransitionKey}
-                    addEndListener={(node, done) => {
-                        node.addEventListener("transitionend", done, false);
-                    }}
-                    classNames="fade"
-                >
+            // <SwitchTransition mode={'out-in'}>
+            //     <CSSTransition
+            //         key={todoTransitionKey}
+            //         addEndListener={(node, done) => {
+            //             node.addEventListener("transitionend", done, false);
+            //         }}
+            //         classNames="fade"
+            //     >
                     <div>
                         <div className={classes.TodoList}>
                             <div className={classes['todo-list-title']}>
@@ -102,10 +93,10 @@ class TodoList extends Component {
                                 </div>
                             </div>
                             {
-                                this.props.todos.data.length > 0 ? 
+                                this.props.todos.data.length > 0 ?
                                     <TransitionGroup 
-                                        in={true}
-                                        appear={true}
+                                        appear={false}
+                                        in={false}
                                     >    
                                         {todos}
                                     </TransitionGroup>
@@ -113,8 +104,8 @@ class TodoList extends Component {
                             }
                         </div>
                     </div>
-                </CSSTransition>
-            </SwitchTransition>
+            //     </CSSTransition>
+            // </SwitchTransition>
         );
     }
 }
