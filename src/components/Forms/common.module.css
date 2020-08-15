@@ -1,0 +1,11 @@
+.link{
+    color: rgb(128, 128, 128);
+    text-align: center;
+    display: block;
+    margin: 15px 0 0 0;
+}
+
+.link:hover{
+    color: rgb(100, 100, 100);
+}
+  

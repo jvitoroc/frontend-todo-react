@@ -1,0 +1,65 @@
+.input,
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+input:-internal-autofill-selected{
+    display: block;
+    border: none;
+    outline: none;
+    padding: 8px 6px 5px 6px;
+    width: 100%;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 300;
+    color: #646464 !important;
+    border: 2px solid rgb(192, 192, 192);
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+.InputText{
+    position: relative;
+}
+
+.InputText:not(:last-child){
+    margin-bottom: 14px;
+}
+
+.input::placeholder{
+    color: rgb(192, 192, 192);
+}
+
+.input:not(.empty) + .label,
+.input:focus + .label{  
+    top: -8px;
+    left: 6px;
+    background-color: white;
+}
+
+.input:focus{  
+    border-color: rgb(128, 128, 128);
+    transition: 0.2s;
+}
+
+.label{
+    position: absolute;
+    top: 10px;
+    left: 5px;
+    padding: 0 2px;
+    font-size: 15px;
+    transition: 0.3s;
+    z-index: 1;
+}
+
+.error{
+    border-color: #ff5454 !important;
+}
+
+.error-message{
+    color: #e53838;
+    padding-top: 1px;
+    font-weight: 400;
+    font-size: 12px;
+    box-sizing: border-box;
+}

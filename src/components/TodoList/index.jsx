@@ -33,12 +33,20 @@ class TodoList extends Component {
         }
     }
 
+    getWelcomeText = ()=>{
+        let hours = (new Date()).getHours();
+        if(hours >= 0 && hours <= 11)
+            return 'Good morning, here are your todos';
+        else if(hours >= 12 && hours <= 17)
+            return 'Good afternoon, here are your todos';
+        else
+            return 'Good evening, here are your todos';
+    }
+
     render() {
         let todos = this.props.todos.data.map((e) => {
                 return (
                     <CSSTransition
-                        mountOnEnter
-                        unmountOnExit
                         key={e.todoId}
                         timeout={1000}
                         classNames={"item"}
@@ -61,32 +69,26 @@ class TodoList extends Component {
         let goBackClasses = classnames(classes['action-button'], this.props.match.params.parentTodoId === undefined ? classes['disabled']:'')
 
         return (
-            <div>
-                <div className={classes.TodoList}>
-                    <div className={classes['todo-list-title']}>
-                        <div>
-                            {this.props.todos.parentTodoDescription}
-                        </div>
+            <div className={classes.TodoList}>
+                <div className={classes['todo-list-title']}>
+                    <div>
+                        {this.props.match.params.parentTodoId ? this.props.todos.parentTodoDescription:this.getWelcomeText()}
                     </div>
-                    <div className={classes['actions']}>
-                        <div onClick={this.goBack} className={goBackClasses}> 
-                            <MdArrowUpward size={24}/>
-                        </div>
-                        <div onClick={this.addTodo} className={classnames(classes['action-button'], classes['add-action-button'])}> 
-                            <MdAdd size={24}/>
-                        </div>
-                        <div onClick={this.props.deleteSelectedTodos} className={deleteButtonClasses}> 
-                            <MdDelete size={24}/>
-                        </div>
-                    </div>
-                        {
-                            this.props.todos.data.length > 0 ?
-                                <TransitionGroup>    
-                                    {todos}
-                                </TransitionGroup>
-                            :null
-                        }
                 </div>
+                <div className={classes['actions']}>
+                    <div onClick={this.goBack} className={goBackClasses}> 
+                        <MdArrowUpward size={24}/>
+                    </div>
+                    <div onClick={this.addTodo} className={classnames(classes['action-button'], classes['add-action-button'])}> 
+                        <MdAdd size={24}/>
+                    </div>
+                    <div onClick={this.props.deleteSelectedTodos} className={deleteButtonClasses}> 
+                        <MdDelete size={24}/>
+                    </div>
+                </div>
+                    <TransitionGroup>    
+                        {todos}
+                    </TransitionGroup>
             </div>
         );
     }

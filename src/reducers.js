@@ -8,7 +8,9 @@ import {
 	REQUEST_TODOS,
 	RECEIVE_TODOS,
 	TOGGLE_EDIT_MODE,
-	RECEIVE_USER_DATA
+	RECEIVE_USER,
+	RECEIVE_USER_FAILED,
+	LOGOUT_USER
 } from './actions.js'
 
 function todos(state = {
@@ -69,22 +71,27 @@ function todos(state = {
 				parentTodoDescription: action.parentTodoDescription,
 				data: action.todos
 			}
-		case RECEIVE_USER_DATA:
-			return {
-				...state,
-				user: action.user
-			}
 		default:
 			return state
     }
 } 
 
-function user(state = {}, action) {
+function user(state = {loading: true, authenticated: false}, action) {
     switch (action.type) {
-		case RECEIVE_USER_DATA:
+		case RECEIVE_USER:
 			return {
 				...state,
-				user: action.user
+				info: action.user,
+				loading: false,
+				authenticated: true
+			}
+		case LOGOUT_USER:
+		case RECEIVE_USER_FAILED:
+			return {
+				...state,
+				loading: false,
+				authenticated: false,
+				info: {}
 			}
 		default:
 			return state

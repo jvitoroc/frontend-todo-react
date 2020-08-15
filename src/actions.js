@@ -10,7 +10,9 @@ export const TOGGLE_EDIT_MODE = 'TOGGLE_EDIT_MODE'
 
 export const REQUEST_TODOS = 'REQUEST_TODOS'
 export const RECEIVE_TODOS = 'RECEIVE_TODOS'
-export const RECEIVE_USER_DATA = 'RECEIVE_USER_DATA'
+export const RECEIVE_USER = 'RECEIVE_USER'
+export const RECEIVE_USER_FAILED = 'RECEIVE_USER_FAILED'
+export const LOGOUT_USER = 'LOGOUT_USER'
 
 export const MODIFY_TODO = 'MODIFY_TODO'
 
@@ -21,14 +23,6 @@ export function addTodo() {
 export function receiveTodo(json) {
 	return { type: RECEIVE_TODO, todo: Object.assign({editingDescription: false}, json.data) };
 }
-
-export function editTodoDescription(todoId, text) {
-	return { type: EDIT_TODO_DESCRIPTION, todoId, text }
-}
-  
-export function completeTodo(todoId) {
-	return { type: COMPLETE_TODO, todoId }
-}
   
 export function selectTodo(todoId) {
 	return { type: SELECT_TODO, todoId }
@@ -38,30 +32,45 @@ export function toggleEditMode(todoId) {
 	return { type: TOGGLE_EDIT_MODE, todoId }
 }
 
+export function logoutUser() {
+	return { type: LOGOUT_USER }
+}
+
 export function requestTodos(parentTodoId) {
 	return { type: REQUEST_TODOS, parentTodoId }
 }
 
-export function modifyTodo(todoId, todo) {
-	return { type: MODIFY_TODO, todoId, todo }
+export function receiveUser(data) {
+	return {
+		type: RECEIVE_USER,
+		user: data
+	}
 }
 
-export function receiveUserData(data) {
+export function receiveUserFailed() {
 	return {
-		type: RECEIVE_USER_DATA,
-		user: data
+		type: RECEIVE_USER_FAILED
 	}
 }
 
 export function loginSucessfull(data) {
 	return function (dispatch) {
 		localStorage.setItem("token", data.token);
-		dispatch(receiveUserData(data.user));
+		dispatch(receiveUser(data.user));
+	}
+}
+
+export function logout() {
+	return function (dispatch) {
+		localStorage.removeItem("token");
+		dispatch(logoutUser());
 	}
 }
 
 export function receiveTodos(parentTodoId, json) {
 	let grandParentTodoId, parentTodoDescription;
+
+	console.log(json);
 
 	if(json.data.todo){
 		parentTodoDescription = json.data.todo.description;

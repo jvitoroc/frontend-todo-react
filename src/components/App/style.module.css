@@ -1,0 +1,54 @@
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+:global(#root){
+    height: 100%;
+}
+
+body{
+    background-color: rgb(238, 238, 238);
+    margin: 0;
+}
+
+.App,
+.page,
+.pages-wrapper,
+.pages-wrapper > div,
+body{
+    height: 100%;
+}
+
+.loading-spinner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+:global(.transition-enter),
+:global(.transition-appear) {
+    opacity: 0;
+    transform: scale(1.1);
+}
+
+:global(.transition-enter-active),
+:global(.transition-appear-active)  {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 300ms, transform 300ms;
+}
+
+:global(.transition-exit) {
+    opacity: 1;
+    transform: scale(1);
+}
+
+:global(.transition-exit-active) {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 300ms, transform 300ms;
+}

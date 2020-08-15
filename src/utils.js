@@ -12,20 +12,21 @@ export function authenticateUser(){
         setTimeout(() => {
             let token = localStorage.getItem("token");
             if(token === null){
-                resolve(false);
+                resolve({authenticated: false, user: null});
                 return;
             }
             getUser(token)
             .then(
-                async response => {
+                async (response) => {
                     if(response.ok === false){
-                        resolve(false);
+                        resolve({authenticated: false, user: null});
                     }
                     else{
-                        resolve(true);
+                        let json = await response.json()
+                        resolve({authenticated: true, user: json.data});
                     }
                 }
             )
-        }, 2000);
+        }, 500);
     })
 }
