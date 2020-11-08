@@ -8,7 +8,7 @@ import { loginSucessfull } from '../../../actions';
 import InputText from '../InputText';
 
 class Login extends Component {
-    state = { }
+    state = { formState: null }
 
     login = (username, password)=>{
 		const init = {
@@ -21,19 +21,29 @@ class Login extends Component {
 	}
 
     handleSubmit = (values, { setSubmitting, setErrors })=>{
-        this.login(values.username, values.password)
-		.then(
-			async response => {
-                let json = await response.json();
-                if(response.ok === false){
-                    setErrors({"*": Object.entries(json.errors).reduce((prev, curr)=> prev + (prev === '' ? '':'\n') + curr[1], ''), ...json.errors});
-                    setSubmitting(false);
+        this.changeFormState('LOADING', ()=>{
+            this.login(values.username, values.password)
+            .then(
+                async response => {
+                    await new Promise((r)=>setTimeout(r, 250));
+                    let json = await response.json();
+                    if(response.ok === false){
+                        setErrors({"*": json.errors ? '':json.message, ...json.errors});
+                        setSubmitting(false);
+                        this.changeFormState(null);
+                    }
+                    else{
+                        this.changeFormState('SUCCESS', ()=>setTimeout(()=>this.props.loginSucessfull(json.data), 1000));
+                    }
                 }
-                else{
-                    this.props.loginSucessfull(json.data);
-                }
-			}
-        )
+            )
+        });
+    }
+
+    changeFormState = (name, callback)=>{
+        this.setState({formState: name}, ()=>{
+            if (callback) callback();
+        })
     }
 
     validateForm = (values)=>{
@@ -47,21 +57,22 @@ class Login extends Component {
         return errors;
     }
 
-    render() { 
+    render() {
         return (
             <BaseForm
                 initialValues={{ username: '', password: '', repeatPassword: '', '*': ''}}
                 validate={this.validateForm}
                 onSubmit={this.handleSubmit}
+                state={this.state.formState}
                 after={<Link className={classes['link']} to={'/signup'}>Create an account</Link>}
             >
                 {({ isSubmitting, errors, values })=>{
                     return (
-                        <div>
+                        <>
                             <InputText name={'username'} label={'Username'} value={values.username} error={errors.username}/>
                             <InputText name={'password'} label={'Password'}  value={values.password} error={errors.password} password/>
                             <Button disabled={isSubmitting} type="submit" value="Log in"/>
-                        </div>
+                        </>
                     )
                 }}
             </BaseForm>

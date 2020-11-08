@@ -70,8 +70,6 @@ export function logout() {
 export function receiveTodos(parentTodoId, json) {
 	let grandParentTodoId, parentTodoDescription;
 
-	console.log(json);
-
 	if(json.data.todo){
 		parentTodoDescription = json.data.todo.description;
 		if(json.data.parent)
@@ -200,25 +198,3 @@ export function deleteSelectedTodos() {
 		)
 	}
 }
-
-// export function login(username, password) {
-// 	return function (dispatch) {
-// 		const init = {
-// 			method: 'POST',
-// 			body: JSON.stringify({username, password}),
-// 			headers: {'Content-Type': 'application/json'}
-// 		}
-
-// 		return fetch('http://localhost:8000/user/session', init)
-// 		.then(
-// 			response => {
-// 				return response.json()
-// 			}
-// 		)
-// 		.then(
-// 			json => {
-// 				dispatch(loginSucessfull(json))
-// 			}
-// 		)
-// 	}
-// }

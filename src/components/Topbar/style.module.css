@@ -19,7 +19,7 @@
     padding: 10px;
 }
 
-.link{
+.button{
     color: #6f6f6f;
     border-radius: 10px;
     text-decoration: none;
@@ -28,8 +28,11 @@
     -webkit-user-select: none;
     user-select: none;
     box-shadow: 0px 0px 10px rgb(226, 226, 226);
+    border: none;
+    cursor: pointer;
+    outline: none;
 }
 
-.link:hover{
+.button:hover{
     background-color: rgb(255, 255, 255);
 }

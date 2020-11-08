@@ -108,13 +108,7 @@ class App extends Component {
                                 >
                                     {TodoList}
                                 </ProtectedRoute>
-                                <Route>
-                                    {() => (
-                                        <div className="page">
-                                            <h1>{/* TODO */}Not found</h1>
-                                        </div>
-                                    )}
-                                </Route>
+                                <Redirect to="/404"/>
                             </Switch>
                         </CSSTransition>
                     </TransitionGroup>

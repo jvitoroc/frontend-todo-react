@@ -9,6 +9,8 @@ import {withRouter} from 'react-router-dom';
 import classnames from 'classnames';
 
 class TodoList extends Component {
+    state = {newTodo: false};
+
     componentDidMount = () => {
         this.props.fetchTodos(this.props.match.params.parentTodoId);
     }
@@ -18,8 +20,14 @@ class TodoList extends Component {
             this.props.fetchTodos(this.props.match.params.parentTodoId);
     }
 
-    addTodo = () => {
-        this.props.createTodo(this.props.match.params.parentTodoId, 'Describe your new todo');
+    newTodo = () =>{
+        // this.setState({newTodo: true});
+    //  this.props.createTodo(this.props.match.params.parentTodoId, description);
+    }
+
+    createTodo = (description) => {
+        this.props.createTodo(this.props.match.params.parentTodoId, '12312');
+        // this.setState({newTodo: false});
     }
 
     openTodo = (id) => {
@@ -65,6 +73,22 @@ class TodoList extends Component {
             }
         );
 
+        // if(this.state.newTodo){
+        //     todos.unshift(
+        //         <CSSTransition
+        //             key={'new-todo'}
+        //             timeout={1000}
+        //             classNames={"item"}
+        //         >
+        //             <Todo
+        //                 new
+        //                 editingDescription
+        //                 onEditDescription={(description)=>{this.createTodo(description)}}
+        //             />
+        //         </CSSTransition>
+        //     );
+        // }
+
         let deleteButtonClasses = classnames(classes['action-button'], classes['delete-action-button'], !this.props.todos.allowDeletion ? classes['disabled']:'')
         let goBackClasses = classnames(classes['action-button'], this.props.match.params.parentTodoId === undefined ? classes['disabled']:'')
 
@@ -79,7 +103,7 @@ class TodoList extends Component {
                     <div onClick={this.goBack} className={goBackClasses}> 
                         <MdArrowUpward size={24}/>
                     </div>
-                    <div onClick={this.addTodo} className={classnames(classes['action-button'], classes['add-action-button'])}> 
+                    <div onClick={this.createTodo} className={classnames(classes['action-button'], classes['add-action-button'])}> 
                         <MdAdd size={24}/>
                     </div>
                     <div onClick={this.props.deleteSelectedTodos} className={deleteButtonClasses}> 

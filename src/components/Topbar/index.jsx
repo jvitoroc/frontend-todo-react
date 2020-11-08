@@ -15,13 +15,12 @@ class Topbar extends Component {
 
         if(this.props.authenticated){
             items.push(<div key={1} className={classes['text']}>Logged in as <span className={classes['bold']}>{this.props.info.username}</span></div>);
-            items.push(<a key={2} className={classes['link'] + ' ' + classes['text']} onClick={this.handleLogout} href="#">Logout</a>);
+            items.push(<button key={2} className={classes['button'] + ' ' + classes['text']} onClick={this.handleLogout} href="#">Logout</button>);
         }else if(pathname === '/login'){
-            items.push(<Link key={3} className={classes['link'] + ' ' + classes['text']} to='/signup'>Sign up</Link>);
+            items.push(<Link key={3} className={classes['button'] + ' ' + classes['text']} to='/signup'>Sign up</Link>);
         }else if(pathname === '/signup'){
-            items.push(<Link key={4} className={classes['link'] + ' ' + classes['text']} to='/login'>Log in</Link>);
-        }
-        
+            items.push(<Link key={4} className={classes['button'] + ' ' + classes['text']} to='/login'>Log in</Link>);
+        } 
 
         return (
             <div className={classes.Topbar}>

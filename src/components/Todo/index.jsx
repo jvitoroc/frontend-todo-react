@@ -40,6 +40,11 @@ class Todo extends Component {
         }
     }
 
+    componentDidMount = () => {
+        if(this.props.editingDescription)
+            this.textRef.current.focus();
+    }
+
     shouldComponentUpdate(nextProps, nextState){
         if(nextProps.completed !== this.props.completed
             || nextProps.selected !== this.props.selected
@@ -51,14 +56,22 @@ class Todo extends Component {
     }
 
     onEdit = () => {
-        this.props.toggleEditMode();
+        if(!this.props.new)
+            this.props.toggleEditMode();
     }
 
     onClick = (e) => {
-        if(e.shiftKey)
-            this.props.onSelect()
-        else
-            this.props.onOpen();
+        if(!this.props.new){
+            if(e.shiftKey)
+                this.props.onSelect()
+            else
+                this.props.onOpen();
+        }
+    }
+    
+    onComplete = ()=>{
+        if(!this.props.new)
+            this.props.onComplete();
     }
 
     onTextBlur = (e) => {
@@ -71,9 +84,11 @@ class Todo extends Component {
     }
 
     onContextMenu = (e) => {
-        e.preventDefault();
-        this.setState({openPopupMenu: true, popupMenuPosX: e.clientX, popupMenuPosY: e.clientY})
-        return false;
+        if(!this.props.new){
+            e.preventDefault();
+            this.setState({openPopupMenu: true, popupMenuPosX: e.clientX, popupMenuPosY: e.clientY})
+            return false;
+        }
     }
 
     render() { 
@@ -93,9 +108,9 @@ class Todo extends Component {
                             {icon: <MdDelete/>, label: 'Delete', onClick: this.props.onDelete}
                         ]}
                     />
-                    <div onClick={this.props.onComplete} className={checkClasses}>{<IoMdCheckmark size={32}/>}</div>
+                    <div onClick={this.onComplete} className={checkClasses}>{<IoMdCheckmark size={32}/>}</div>
                     <div onClick={this.onClick} onInput={this.onTextInput} onKeyDown={this.onKeyDown} onBlur={this.onTextBlur} className={classes['text']}>
-                        <div ref={this.textRef} suppressContentEditableWarning={true} contentEditable={this.props.editingDescription}>
+                        <div ref={this.textRef} suppressContentEditableWarning={true} contentEditable={this.props.editingDescription} tabIndex={this.props.editingDescription ? 0:undefined}>
                             {this.props.description}
                         </div>
                     </div>

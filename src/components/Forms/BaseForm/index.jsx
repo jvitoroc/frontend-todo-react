@@ -1,44 +1,43 @@
 import React, { Component } from 'react';
 import classes from './style.module.css';
 import { Formik, Form } from 'formik';
+import Overlay from '../Overlay';
+import ErrorMessage from '../ErrorMessage';
 
 class BaseForm extends Component {
     render() { 
-        let {after, children, initialValues, validateForm, onSubmit} = {...this.props};
+        let {after, children, state, initialValues, validate, onSubmit} = {...this.props};
+        let index;
+        
+        switch(state){
+            case 'LOADING': index = 0; break;
+            case 'SUCCESS': index = 1; break;
+            default: index = -1;
+        }
 
         return (
             <div className={classes.BaseForm}>
-                <div className={classes["form-wrapper"]}>
+                <Overlay
+                    className={classes["form-wrapper"]}
+                    index={index}
+                >
                     <div className={classes["logo"]}/>
                     <Formik
                         initialValues={initialValues}
-                        validate={validateForm}
+                        validate={validate}
                         onSubmit={onSubmit}
                     >
                         {(formProps) => {
-                            console.log(formProps.errors["*"]);
                             return (
                                 <Form>
-                                    {/* <SwitchTransition>
-                                        <CSSTransition
-                                            key={formProps.errors["*"]}
-                                            classNames={'alert'}
-                                            in={formProps.errors["*"] !== undefined}
-                                            unmountOnExit
-                                            timeout={200}
-                                        >
-                                            <div className={classes['error-message']}>
-                                                {formProps.errors["*"]}
-                                            </div>
-                                        </CSSTransition>
-                                    </SwitchTransition> */}
+                                    <ErrorMessage className={classes['error-message']} message={formProps.errors['*']}/>
                                     {children(formProps)}
                                 </Form>
                             )
                         }}
                     </Formik>
                     {after ? after:null}
-                </div>
+                </Overlay>
             </div>
         );
     }
