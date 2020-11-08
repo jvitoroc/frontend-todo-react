@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classes from '../common.module.css';
 import BaseForm from '../BaseForm';
 import Button from '../Button';
@@ -6,11 +6,12 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loginSucessfull } from '../../../actions';
 import InputText from '../InputText';
+import { useState } from 'react';
 
-class Signup extends Component {
-    state = { formState: null }
+function Signup(props){
+    const [formState, setFormState] = useState(null);
 
-    signUp = (username, password)=>{
+    const signUp = (username, password)=>{
 		const init = {
 			method: 'POST',
 			body: JSON.stringify({username, password}),
@@ -20,33 +21,27 @@ class Signup extends Component {
 		return fetch('http://localhost:8000/user/', init);
 	}
 
-    handleSubmit = (values, { setSubmitting, setErrors })=>{
-        this.changeFormState('LOADING', ()=>{
-            this.signUp(values.username, values.password)
-            .then(
-                async response => {
-                    await new Promise((r)=>setTimeout(r, 250));
-                    let json = await response.json();
-                    if(response.ok === false){
-                        setErrors({"*": json.errors ? '':json.message, ...json.errors});
-                        setSubmitting(false);
-                        this.changeFormState(null);
-                    }
-                    else{
-                        this.changeFormState('SUCCESS', ()=>setTimeout(()=>this.props.history.push('/login'), 1000));
-                    }
+    const handleSubmit = (values, { setSubmitting, setErrors })=>{
+        setFormState('LOADING');
+        signUp(values.username, values.password)
+        .then(
+            async response => {
+                await new Promise((r)=>setTimeout(r, 250));
+                let json = await response.json();
+                if(response.ok === false){
+                    setErrors({"*": json.errors ? '':json.message, ...json.errors});
+                    setSubmitting(false);
+                    setFormState(null);
                 }
-            )
-        });
-    }
+                else{
+                    setFormState('SUCCESS');
+                    setTimeout(()=>props.history.push('/login'), 1000);
+                }
+            }
+        )
+    };
 
-    changeFormState = (name, callback)=>{
-        this.setState({formState: name}, ()=>{
-            if (callback) callback();
-        })
-    }
-
-    validateForm = (values)=>{
+    const validateForm = (values)=>{
         const errors = {};
         if (!values.username)
             errors.username = 'Username is required.';
@@ -62,28 +57,26 @@ class Signup extends Component {
         return errors;
     }
 
-    render() { 
-        return (
-            <BaseForm
-                initialValues={{ username: '', password: '', repeatPassword: '' }}
-                validate={this.validateForm}
-                onSubmit={this.handleSubmit}
-                state={this.state.formState}
-                after={<Link className={classes['link']} to={'/login'}>Already have an account? Log in</Link>}
-            >
-                {({ isSubmitting, errors, values })=>{
-                    return (
-                        <>
-                            <InputText name={'username'} label={'Username'} value={values.username} error={errors.username}/>
-                            <InputText name={'password'} label={'Password'}  value={values.password} error={errors.password} password/>
-                            <InputText name={'repeatPassword'} label={'Repeat password'}  value={values.repeatPassword} error={errors.repeatPassword} password/>
-                            <Button disabled={isSubmitting} type="submit" value="Sign up"/>
-                        </>
-                    )
-                }}
-            </BaseForm>
-        );
-    }
+    return (
+        <BaseForm
+            initialValues={{ username: '', password: '', repeatPassword: '' }}
+            validate={validateForm}
+            onSubmit={handleSubmit}
+            state={formState}
+            after={<Link className={classes['link']} to={'/login'}>Already have an account? Log in</Link>}
+        >
+            {({ isSubmitting, errors, values })=>{
+                return (
+                    <>
+                        <InputText name={'username'} label={'Username'} value={values.username} error={errors.username}/>
+                        <InputText name={'password'} label={'Password'}  value={values.password} error={errors.password} password/>
+                        <InputText name={'repeatPassword'} label={'Repeat password'}  value={values.repeatPassword} error={errors.repeatPassword} password/>
+                        <Button disabled={isSubmitting} type="submit" value="Sign up"/>
+                    </>
+                )
+            }}
+        </BaseForm>
+    );
 }
 
 const mapStateToProps = (state) => {
