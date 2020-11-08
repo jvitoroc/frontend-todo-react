@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classes from './style.module.css';
 
-class Button extends Component {
-    render() { 
-        return (
-            <input {...this.props} className={classes["button"]} type="submit"/>
-        );
-    }
+function Button(props){
+    return (
+        <input {...props} className={classes["button"]} type="submit"/>
+    );
 }
 
 export default Button;
