@@ -4,6 +4,10 @@ import classes from './style.module.css';
 import classnames from 'classnames';
 import PopupMenu from '../PopupMenu';
 import {MdEdit, MdDelete} from 'react-icons/md'
+import { useState } from 'react';
+import userEvent from '@testing-library/user-event';
+import { useRef } from 'react';
+import { useEffect } from 'react';
 
 function setEndOfContenteditable(contentEditableElement)
 {
@@ -26,98 +30,89 @@ function setEndOfContenteditable(contentEditableElement)
     }
 }
 
-class Todo extends Component {
-    constructor(props){
-        super(props);
-        this.textRef = React.createRef();
-        this.state = {openPopupMenu: false, popupMenuPosX: 0, popupMenuPosY: 0};
-    }
+function Todo(props) {
+    const [popupMenu, setPopupMenu] = useState({open: false, posX: 0, posY: 0});
+    const textRef = useRef(null);
 
-    componentDidUpdate = () => {
-        if(this.props.editingDescription){
-            this.textRef.current.focus();
-            setEndOfContenteditable(this.textRef.current);
+    useEffect(()=>{
+        if(props.editingDescription){
+            textRef.current.focus();
+            setEndOfContenteditable(textRef.current);
         }
-    }
+    }, [props.editingDescription]);
 
-    componentDidMount = () => {
-        if(this.props.editingDescription)
-            this.textRef.current.focus();
-    }
-
-    shouldComponentUpdate(nextProps, nextState){
-        if(nextProps.completed !== this.props.completed
-            || nextProps.selected !== this.props.selected
-            || nextProps.text !== this.props.text
-            || nextProps.editingDescription !== this.props.editingDescription
-            || nextState.openPopupMenu !== this.state.openPopupMenu) return true;
+    // shouldComponentUpdate(nextProps, nextState){
+    //     if(nextProps.completed !== this.props.completed
+    //         || nextProps.selected !== this.props.selected
+    //         || nextProps.text !== this.props.text
+    //         || nextProps.editingDescription !== this.props.editingDescription
+    //         || nextState.openPopupMenu !== this.state.openPopupMenu) return true;
         
-        return false;
+    //     return false;
+    // }
+
+    const onEdit = () => {
+        if(!props.new)
+            props.toggleEditMode();
     }
 
-    onEdit = () => {
-        if(!this.props.new)
-            this.props.toggleEditMode();
-    }
-
-    onClick = (e) => {
-        if(!this.props.new){
+    const onClick = (e) => {
+        if(!props.new){
             if(e.shiftKey)
-                this.props.onSelect()
+                props.onSelect()
             else
-                this.props.onOpen();
+                props.onOpen();
         }
     }
     
-    onComplete = ()=>{
-        if(!this.props.new)
-            this.props.onComplete();
+    const onComplete = ()=>{
+        if(!props.new)
+            props.onComplete();
     }
 
-    onTextBlur = (e) => {
-        this.props.onEditDescription(e.target.textContent);
+    const onTextBlur = (e) => {
+        props.onEditDescription(e.target.textContent);
     }
 
-    onKeyDown = (e) => {
+    const onKeyDown = (e) => {
         if(e.keyCode === 13)
             e.target.blur();
     }
 
-    onContextMenu = (e) => {
+    const onContextMenu = (e) => {
         if(!this.props.new){
             e.preventDefault();
-            this.setState({openPopupMenu: true, popupMenuPosX: e.clientX, popupMenuPosY: e.clientY})
+            setPopupMenu({open: true, posX: e.clientX, posY: e.clientY})
             return false;
         }
     }
 
-    render() { 
-        let checkClasses = classnames(classes['check-icon'], this.props.completed ? classes['checked'] : '');
-        let todoClasses = classnames(classes.Todo, this.props.selected ? classes['selected'] : '');
+    let checkClasses = classnames(classes['check-icon'], props.completed ? classes['checked'] : '');
+    let todoClasses = classnames(classes.Todo, props.selected ? classes['selected'] : '');
 
-        return (
-            <div className={classes["todo-wrapper"]}>
-                <div onContextMenu={this.onContextMenu} className={todoClasses}>
-                    <PopupMenu
-                        show={this.state.openPopupMenu}
-                        posX={this.state.popupMenuPosX}
-                        posY={this.state.popupMenuPosY}
-                        onClose={()=>{this.setState({openPopupMenu: false})}}
-                        items={[
-                            {icon: <MdEdit/>, label: 'Edit', onClick: this.onEdit},
-                            {icon: <MdDelete/>, label: 'Delete', onClick: this.props.onDelete}
-                        ]}
-                    />
-                    <div onClick={this.onComplete} className={checkClasses}>{<IoMdCheckmark size={32}/>}</div>
-                    <div onClick={this.onClick} onInput={this.onTextInput} onKeyDown={this.onKeyDown} onBlur={this.onTextBlur} className={classes['text']}>
-                        <div ref={this.textRef} suppressContentEditableWarning={true} contentEditable={this.props.editingDescription} tabIndex={this.props.editingDescription ? 0:undefined}>
-                            {this.props.description}
-                        </div>
+    return (
+        <div className={classes["todo-wrapper"]}>
+            <div onContextMenu={onContextMenu} className={todoClasses}>
+                <PopupMenu
+                    show={popupMenu.open}
+                    posX={popupMenu.posX}
+                    posY={popupMenu.posY}
+                    onClose={()=>{setPopupMenu({open: false})}}
+                    items={[
+                        {icon: <MdEdit/>, label: 'Edit', onClick: onEdit},
+                        {icon: <MdDelete/>, label: 'Delete', onClick: props.onDelete}
+                    ]}
+                />
+                <div onClick={onComplete} className={checkClasses}>{<IoMdCheckmark size={32}/>}</div>
+                <div onClick={onClick} onInput={onTextInput} onKeyDown={onKeyDown} onBlur={onTextBlur} className={classes['text']}>
+                    <div ref={textRef} suppressContentEditableWarning={true} contentEditable={props.editingDescription} tabIndex={props.editingDescription ? 0:undefined}>
+                        {props.description}
                     </div>
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
+
 }
  
 export default Todo;
