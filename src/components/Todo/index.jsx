@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {IoMdCheckmark} from 'react-icons/io'
 import classes from './style.module.css';
 import classnames from 'classnames';
 import PopupMenu from '../PopupMenu';
 import {MdEdit, MdDelete} from 'react-icons/md'
 import { useState } from 'react';
-import userEvent from '@testing-library/user-event';
 import { useRef } from 'react';
 import { useEffect } from 'react';
 
@@ -60,7 +59,7 @@ function Todo(props) {
         if(!props.new){
             if(e.shiftKey)
                 props.onSelect()
-            else
+            else if(!props.editingDescription)
                 props.onOpen();
         }
     }
@@ -80,7 +79,7 @@ function Todo(props) {
     }
 
     const onContextMenu = (e) => {
-        if(!this.props.new){
+        if(!props.new){
             e.preventDefault();
             setPopupMenu({open: true, posX: e.clientX, posY: e.clientY})
             return false;
@@ -104,7 +103,7 @@ function Todo(props) {
                     ]}
                 />
                 <div onClick={onComplete} className={checkClasses}>{<IoMdCheckmark size={32}/>}</div>
-                <div onClick={onClick} onInput={onTextInput} onKeyDown={onKeyDown} onBlur={onTextBlur} className={classes['text']}>
+                <div onClick={onClick} onKeyDown={onKeyDown} onBlur={onTextBlur} className={classes['text']}>
                     <div ref={textRef} suppressContentEditableWarning={true} contentEditable={props.editingDescription} tabIndex={props.editingDescription ? 0:undefined}>
                         {props.description}
                     </div>
@@ -112,7 +111,6 @@ function Todo(props) {
             </div>
         </div>
     );
-
 }
  
 export default Todo;
