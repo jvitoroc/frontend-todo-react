@@ -17,6 +17,7 @@ function todos(state = {
 	allowDeletion: false,
 	isFetching: false,
 	isCreating: false,
+	fetched: false,
 	parentTodoDescription: null,
 	parentTodoId: undefined,
     data: []
@@ -59,6 +60,7 @@ function todos(state = {
 			return {
 				...state,
 				isFetching: true,
+				fetched: action.parentTodoId === state.parentTodoId,
 				allowDeletion: false
 			}
 		case RECEIVE_TODOS:
@@ -69,6 +71,7 @@ function todos(state = {
 				parentTodoId: action.parentTodoId,
 				grandParentTodoId: action.grandParentTodoId,
 				parentTodoDescription: action.parentTodoDescription,
+				fetched: true,
 				data: action.todos
 			}
 		default:

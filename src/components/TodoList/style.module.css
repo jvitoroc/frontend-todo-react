@@ -57,13 +57,19 @@
     background: rgb(245, 245, 245);
 }
 
-:global(.item-enter), :global(.item-appear){
+:global(.item-enter){
     max-height: 0px;
+}
+
+:global(.item-enter), :global(.item-appear){
     background-color: rgb(240, 240, 240);
 }
 
-:global(.item-enter-active), :global(.item-appear-active){
+:global(.item-enter-active){
     max-height: 500px;
+}
+
+:global(.item-enter-active), :global(.item-appear-active){
     background-color: white;
     transition: 1s ease-out;
 }
