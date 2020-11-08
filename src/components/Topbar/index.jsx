@@ -4,30 +4,28 @@ import { connect } from 'react-redux';
 import { logout } from '../../actions';
 import classes from './style.module.css'
 
-class Topbar extends Component {
-    handleLogout = ()=>{
-        this.props.logout();
+function Topbar(props){
+    const handleLogout = ()=>{
+        props.logout();
     }
 
-    render() {
-        let items = []
-        let pathname = this.props.location.pathname;
+    let items = []
+    let pathname = props.location.pathname;
 
-        if(this.props.authenticated){
-            items.push(<div key={1} className={classes['text']}>Logged in as <span className={classes['bold']}>{this.props.info.username}</span></div>);
-            items.push(<button key={2} className={classes['button'] + ' ' + classes['text']} onClick={this.handleLogout} href="#">Logout</button>);
-        }else if(pathname === '/login'){
-            items.push(<Link key={3} className={classes['button'] + ' ' + classes['text']} to='/signup'>Sign up</Link>);
-        }else if(pathname === '/signup'){
-            items.push(<Link key={4} className={classes['button'] + ' ' + classes['text']} to='/login'>Log in</Link>);
-        } 
+    if(props.authenticated){
+        items.push(<div key={1} className={classes['text']}>Logged in as <span className={classes['bold']}>{props.info.username}</span></div>);
+        items.push(<button key={2} className={classes['button'] + ' ' + classes['text']} onClick={handleLogout} href="#">Logout</button>);
+    }else if(pathname === '/login'){
+        items.push(<Link key={3} className={classes['button'] + ' ' + classes['text']} to='/signup'>Sign up</Link>);
+    }else if(pathname === '/signup'){
+        items.push(<Link key={4} className={classes['button'] + ' ' + classes['text']} to='/login'>Log in</Link>);
+    } 
 
-        return (
-            <div className={classes.Topbar}>
-                {items}
-            </div>
-        );
-    }
+    return (
+        <div className={classes.Topbar}>
+            {items}
+        </div>
+    );
 }
 
 const mapStateToProps = (state) => {

@@ -57,29 +57,30 @@
     background: rgb(245, 245, 245);
 }
 
-:global(.item-enter){
+
+.TodoList :global(.item-enter){
     max-height: 0px;
 }
 
-:global(.item-enter), :global(.item-appear){
+.TodoList :global(.item-enter), .TodoList :global(.item-appear){
     background-color: rgb(240, 240, 240);
 }
 
-:global(.item-enter-active){
+.TodoList :global(.item-enter-active){
     max-height: 500px;
 }
 
-:global(.item-enter-active), :global(.item-appear-active){
+.TodoList :global(.item-enter-active), .TodoList :global(.item-appear-active){
     background-color: white;
     transition: 1s ease-out;
 }
 
-:global(.item-exit){
+.TodoList :global(.item-exit){
     opacity: 1;
     max-height: 100px;
 }
 
-:global(.item-exit-active){
+.TodoList :global(.item-exit-active){
     opacity: 0;
     max-height: 0px;
     transition: 0.4s ease-out;
