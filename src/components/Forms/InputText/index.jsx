@@ -4,13 +4,6 @@ import ErrorMessage from '../ErrorMessage';
 import classes from './style.module.css';
 
 function InputText(props = {password: false}){
-    // const lastErrorMessageRef = useRef(null);
-
-    // useEffect(()=>{
-    //     if(props.error !== undefined)
-    //         lastErrorMessageRef.current = props.error;
-    // });
-
     let {name, label, value, error, password} = {...props};
     let inputClasses = classes['input'] 
     inputClasses += (value === "" ? ' ' + classes["empty"]:"")

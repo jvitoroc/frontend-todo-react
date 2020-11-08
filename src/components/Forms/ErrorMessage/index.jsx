@@ -1,24 +1,22 @@
-import React, { Component } from 'react';
+import React, { useRef, useEffect } from 'react';
 import classes from './style.module.css';
 import AnimateHeight from 'react-animate-height';
 
-class ErrorMessage extends Component {
-    componentWillUpdate({message}){
-        if(message !== undefined)
-            this.lastMessage = message;
-    }
+function ErrorMessage(props){
+    const lastMessageRef = useRef(null);
 
-    render() { 
-        return (
-            <AnimateHeight
-                className={this.props.className}
-                duration={200}
-                height={this.props.message === undefined ? 0:'auto'}
-            >
-                <div className={classes["error-message"]}>{this.lastMessage}</div>
-            </AnimateHeight>
-        );
-    }
+    if(props.message)
+        lastMessageRef.current = props.message;
+
+    return (
+        <AnimateHeight
+            className={props.className}
+            duration={200}
+            height={props.message === undefined ? 0:'auto'}
+        >
+            <div className={classes["error-message"]}>{lastMessageRef.current}</div>
+        </AnimateHeight>
+    );
 }
 
 export default ErrorMessage;
