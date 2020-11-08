@@ -1,37 +1,33 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classes from './style.module.css';
 
-class PopupMenuItem extends Component {
-    onClick = (e) => {
+function PopupMenuItem(props){
+    const onClick = (e) => {
         e.stopPropagation();
-        this.props.onClick(e);
-        this.props.onClose();
+        props.onClick(e);
+        props.onClose();
     }
     
-    render() {
-        return (
-            <div className={classes.PopupMenuItem} onClick={this.onClick}>
-                {/* <div className={classes['icon']}>{this.props.icon}</div> */}
-                <div>{this.props.label}</div>
-            </div>
-        );
-    }
+    return (
+        <div className={classes.PopupMenuItem} onClick={onClick}>
+            {/* <div className={classes['icon']}>{props.icon}</div> */}
+            <div>{props.label}</div>
+        </div>
+    );
 }
 
-class PopupMenu extends Component {
-    render() {
-        let items = this.props.items.map((e, i)=>{
-            return <PopupMenuItem key={i} icon={e.icon} onClose={this.props.onClose} onClick={e.onClick} label={e.label}/>
-        });
-        
-        return (
-            <div onClick={this.props.onClose} className={classes['popupmenu-back']} style={{display: this.props.show ? 'block':'none'}}>
-                <div className={classes.PopupMenu} style={{top: this.props.posY + 'px', left: this.props.posX + 'px'}}>
-                    {items}        
-                </div>
+function PopupMenu(props){
+    let items = props.items.map((e, i)=>{
+        return <PopupMenuItem key={i} icon={e.icon} onClose={props.onClose} onClick={e.onClick} label={e.label}/>
+    });
+    
+    return (
+        <div onClick={props.onClose} className={classes['popupmenu-back']} style={{display: props.show ? 'block':'none'}}>
+            <div className={classes.PopupMenu} style={{top: props.posY + 'px', left: props.posX + 'px'}}>
+                {items}        
             </div>
-        );
-    }
+        </div>
+    );
 }
  
 export default PopupMenu;
