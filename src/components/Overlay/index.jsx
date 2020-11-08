@@ -1,44 +1,36 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classes from './style.module.css';
 
-class Layer extends Component {
-    render() {
-        let {wrapper, component} = {...this.props};
-        let content = null;
+function Layer(props){
+    let {wrapper, component} = {...props};
+    let content = null;
 
-        if(wrapper)
-            content = wrapper(component === null ? <div/>:component());
-        else
-            content = component === null ? null:component();
+    if(wrapper)
+        content = wrapper(component === null ? <div/>:component());
+    else
+        content = component === null ? null:component();
 
-        return (
-            <div style={{display: component === null ? 'none':'block'}} className={classes.Layer}>
-                {content}
-            </div>
-        )
-    }
+    return (
+        <div style={{display: component === null ? 'none':'block'}} className={classes.Layer}>
+            {content}
+        </div>
+    )
 }
 
-class Overlay extends Component {
-    static defaultProps = {
-        className: ''
+function Overlay(props){
+    let {className, index, states, wrapper, ...otherProps} = {...props};
+    let stateComponent = null;
+
+    if(index >= 0){
+        stateComponent = states[index];
     }
 
-    render() {
-        let {className, index, states, wrapper, ...otherProps} = {...this.props};
-        let stateComponent = null;
-
-        if(index >= 0){
-            stateComponent = states[index];
-        }
-
-        return (
-            <div {...otherProps} className={classes.Overlay + ' ' + className}>
-                <Layer wrapper={wrapper} component={stateComponent}/>
-                {this.props.children}
-            </div>
-        )
-    }
+    return (
+        <div {...otherProps} className={classes.Overlay + ' ' + className}>
+            <Layer wrapper={wrapper} component={stateComponent}/>
+            {props.children}
+        </div>
+    )
 }
 
 export default Overlay;
