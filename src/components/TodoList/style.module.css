@@ -20,8 +20,10 @@
 
 .todo-list-title > div{
     max-height: 215px;
-    position: absolute;
+    max-width: 95%;
     overflow: hidden;
+    text-overflow: ellipsis;
+    position: absolute;
     bottom: 0;
 }
 

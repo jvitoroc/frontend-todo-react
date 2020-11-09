@@ -6,7 +6,9 @@ import classes from './style.module.css';
 import {MdAdd, MdDelete, MdArrowUpward} from 'react-icons/md'
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {withRouter} from 'react-router-dom';
+import ReactLoading from 'react-loading';
 import classnames from 'classnames';
+
 function TodoList(props){
 
     useEffect(()=>{
@@ -63,30 +65,37 @@ function TodoList(props){
     let deleteButtonClasses = classnames(classes['action-button'], classes['delete-action-button'], !props.todos.allowDeletion ? classes['disabled']:'')
     let goBackClasses = classnames(classes['action-button'], props.match.params.parentTodoId === undefined ? classes['disabled']:'')
 
+    let toBeRendered = null;
+    
+    if(props.todos.fetched){
+        toBeRendered = (
+            <TransitionGroup appear>    
+                {todos}
+            </TransitionGroup>
+        );
+    }
+
+    let title = props.match.params.parentTodoId ? props.todos.parentTodoDescription:getWelcomeText();
+
     return (
         <div className={classes.TodoList}>
             <div className={classes['todo-list-title']}>
-                <div>
-                    {props.match.params.parentTodoId ? props.todos.parentTodoDescription:getWelcomeText()}
+                <div title={title}>
+                    {title}
                 </div>
             </div>
             <div className={classes['actions']}>
-                <div onClick={goBack} className={goBackClasses}> 
+                <div onClick={goBack} className={goBackClasses} title={'Go back.'}> 
                     <MdArrowUpward size={24}/>
                 </div>
-                <div onClick={createTodo} className={classnames(classes['action-button'], classes['add-action-button'])}> 
+                <div onClick={createTodo} className={classnames(classes['action-button'], classes['add-action-button'])} title={'Add todo.'}> 
                     <MdAdd size={24}/>
                 </div>
-                <div onClick={props.deleteSelectedTodos} className={deleteButtonClasses}> 
+                <div onClick={props.deleteSelectedTodos} className={deleteButtonClasses} title={'Add todo.'}> 
                     <MdDelete size={24}/>
                 </div>
             </div>
-                {props.todos.fetched ?
-                        <TransitionGroup appear>    
-                            {todos}
-                        </TransitionGroup>
-                    :null
-                }
+            {toBeRendered}
         </div>
     );
 }

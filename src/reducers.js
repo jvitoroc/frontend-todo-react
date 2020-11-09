@@ -16,7 +16,6 @@ import {
 function todos(state = {
 	allowDeletion: false,
 	isFetching: false,
-	isCreating: false,
 	fetched: false,
 	parentTodoDescription: null,
 	parentTodoId: undefined,
@@ -24,10 +23,6 @@ function todos(state = {
 }, action) {
     switch (action.type) {
 		case ADD_TODO:
-			return {
-				...state,
-				isCreating: true,
-			}
 		case SELECT_TODO:
 			let newTodos = state.data.map((todo) => {
 				if (todo.todoId === action.todoId) {
@@ -60,18 +55,18 @@ function todos(state = {
 			return {
 				...state,
 				isFetching: true,
-				fetched: action.parentTodoId === state.parentTodoId,
-				allowDeletion: false
+				allowDeletion: false,
+				fetched: action.parentTodoId === state.parentTodoId
 			}
 		case RECEIVE_TODOS:
 			return {
 				...state,
 				allowDeletion: false,
 				isFetching: false,
+				fetched: true,
 				parentTodoId: action.parentTodoId,
 				grandParentTodoId: action.grandParentTodoId,
 				parentTodoDescription: action.parentTodoDescription,
-				fetched: true,
 				data: action.todos
 			}
 		default:
