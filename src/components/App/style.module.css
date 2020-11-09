@@ -29,25 +29,25 @@ body{
     height: 100%;
 }
 
-:global(.transition-enter),
-:global(.transition-appear) {
+.App :global(.transition-enter),
+.App :global(.transition-appear){
     opacity: 0;
     transform: scale(1.1);
 }
 
-:global(.transition-enter-active),
-:global(.transition-appear-active)  {
+.App :global(.transition-enter-active),
+.App :global(.transition-appear-active){
     opacity: 1;
     transform: scale(1);
     transition: opacity 300ms, transform 300ms;
 }
 
-:global(.transition-exit) {
+.App :global(.transition-exit){
     opacity: 1;
     transform: scale(1);
 }
 
-:global(.transition-exit-active) {
+.App :global(.transition-exit-active){
     opacity: 0;
     transform: scale(0.9);
     transition: opacity 300ms, transform 300ms;

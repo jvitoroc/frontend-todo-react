@@ -11,6 +11,7 @@ import Topbar from '../Topbar';
 import Signup from '../Forms/Signup';
 import {authenticateUser} from '../../utils';
 import ReactLoading from 'react-loading';
+import { useEffect } from 'react';
 
 function LoadingIndicator(){
     return (
@@ -51,71 +52,69 @@ function ProtectedRoute(props){
     return <Redirect push to={props.redirectTo}/>
 }
 
-class App extends Component {
-    componentDidMount(){
+function App(props){
+    useEffect(()=>{
         authenticateUser()
         .then(({authenticated, user})=>{
             if(authenticated){
-                this.props.receiveUser(user);
+                props.receiveUser(user);
             }else{
                 localStorage.removeItem("token");
-                this.props.receiveUserFailed();
+                props.receiveUserFailed();
             }
         })
+    }, []);
+
+    if(props.loading){
+        return <LoadingIndicator/>
     }
 
-    render() { 
-        if(this.props.loading){
-            return <LoadingIndicator/>
-        }
-
-        return (
-            <div className={classes.App}>
-                <Topbar/>
-                <div className={classes['pages-wrapper']}>
-                    <TransitionGroup>
-                        <CSSTransition
-                            appear
-                            onEnter={()=>{document.body.style.overflow = 'hidden'}}
-                            onEntered={(isAppearing)=>{if(isAppearing) document.body.style.overflow = 'auto'}}
-                            onExited={()=>{document.body.style.overflow = 'auto'}}
-                            key={this.props.location.key}
-                            classNames="transition"
-                            timeout={300}
-                        >
-                            <Switch>
-                                <ProtectedRoute
-                                    path="/login"
-                                    check={()=>{return !this.props.authenticated}}
-                                    redirectTo={'/todos'}
-                                    exact
-                                >
-                                    {Login}
-                                </ProtectedRoute>
-                                <ProtectedRoute
-                                    path="/signup"
-                                    check={()=>{return !this.props.authenticated}}
-                                    redirectTo={'/'}
-                                    exact
-                                >
-                                    {Signup}
-                                </ProtectedRoute>
-                                <ProtectedRoute
-                                    path="/todos/:parentTodoId?"
-                                    check={()=>{return this.props.authenticated}}
-                                    redirectTo={'/login'}
-                                    exact
-                                >
-                                    {TodoList}
-                                </ProtectedRoute>
-                                <Redirect to="/404"/>
-                            </Switch>
-                        </CSSTransition>
-                    </TransitionGroup>
-                </div>
+    return (
+        <div className={classes.App}>
+            <Topbar/>
+            <div className={classes['pages-wrapper']}>
+                <TransitionGroup>
+                    <CSSTransition
+                        appear
+                        onEnter={()=>{document.body.style.overflow = 'hidden'}}
+                        onEntered={(isAppearing)=>{if(isAppearing) document.body.style.overflow = 'auto'}}
+                        onExited={()=>{document.body.style.overflow = 'auto'}}
+                        key={props.location.key}
+                        classNames="transition"
+                        timeout={300}
+                    >
+                        <Switch>
+                            <ProtectedRoute
+                                path="/login"
+                                check={()=>{return !props.authenticated}}
+                                redirectTo={'/todos'}
+                                exact
+                            >
+                                {Login}
+                            </ProtectedRoute>
+                            <ProtectedRoute
+                                path="/signup"
+                                check={()=>{return !props.authenticated}}
+                                redirectTo={'/'}
+                                exact
+                            >
+                                {Signup}
+                            </ProtectedRoute>
+                            <ProtectedRoute
+                                path="/todos/:parentTodoId?"
+                                check={()=>{return props.authenticated}}
+                                redirectTo={'/login'}
+                                exact
+                            >
+                                {TodoList}
+                            </ProtectedRoute>
+                            <Redirect to="/404"/>
+                        </Switch>
+                    </CSSTransition>
+                </TransitionGroup>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 const mapStateToProps = (state) => {
