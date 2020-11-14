@@ -6,18 +6,67 @@ import classes from './style.module.css';
 import {MdAdd, MdDelete, MdArrowUpward} from 'react-icons/md'
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {withRouter} from 'react-router-dom';
-import ReactLoading from 'react-loading';
 import classnames from 'classnames';
+import { useState } from 'react';
+import { useRef } from 'react';
 
 function TodoList(props){
-
+    const [inputNewTodoActive, setInputNewTodoActive] = useState(false);
+    const [inputNewTodoError, setInputNewTodoError] = useState(false);
+    const inputNewTodoRef = useRef(null);
+    
     useEffect(()=>{
         props.fetchTodos(props.match.params.parentTodoId);
     }, [props.match.params.parentTodoId]);
 
+    useEffect(()=>{
+        if(inputNewTodoRef){
+            if(inputNewTodoActive)
+                inputNewTodoRef.current.focus();
+            else
+                inputNewTodoRef.current.blur();
+        }
+    }, [inputNewTodoActive]);
+
+    useEffect(()=>{
+        document.addEventListener('keyup', onKeyUp);
+        return ()=>{document.removeEventListener('keyup', onKeyUp)};
+    }, []);
+
+    const showInputNewTodo = () => {
+        setInputNewTodoError(false);
+        if(!inputNewTodoActive){
+            setInputNewTodoActive(true);
+        }else{
+            createTodo();
+        }
+    }
+
+    const onKeyUp = (e)=>{
+        if(e.code === 'Escape'){
+            setInputNewTodoActive(false);
+        }else if(e.code === 'Enter'){
+            setInputNewTodoActive(true);
+        }
+    } 
+
+    const onInputNewTodoKeyUp = (e) => {
+        if(e.keyCode === 13){
+            createTodo();
+        }else{
+            setInputNewTodoError(false);
+        }
+    }
 
     const createTodo = () => {
-        props.createTodo(props.match.params.parentTodoId, '1');
+        let description = inputNewTodoRef.current.value;
+        if(description === ""){
+            setInputNewTodoError(true);
+        }else{
+            setInputNewTodoError(false);
+            props.createTodo(props.match.params.parentTodoId, description);
+            inputNewTodoRef.current.value = "";
+        }
     }
 
     const openTodo = (id) => {
@@ -63,7 +112,12 @@ function TodoList(props){
     );
 
     let deleteButtonClasses = classnames(classes['action-button'], classes['delete-action-button'], !props.todos.allowDeletion ? classes['disabled']:'')
-    let goBackClasses = classnames(classes['action-button'], props.match.params.parentTodoId === undefined ? classes['disabled']:'')
+    let goBackClasses = classnames(classes['action-button'], props.match.params.parentTodoId === undefined ? classes['disabled']:'');
+    let inputNewTodoClasses = classnames(
+        classes['input-new-todo'],
+        inputNewTodoActive === true ? classes['active']:'',
+        inputNewTodoError === true ? classes['error']:''
+    );
 
     let toBeRendered = null;
     
@@ -84,15 +138,20 @@ function TodoList(props){
                     {title}
                 </div>
             </div>
-            <div className={classes['actions']}>
-                <div onClick={goBack} className={goBackClasses} title={'Go back.'}> 
-                    <MdArrowUpward size={24}/>
-                </div>
-                <div onClick={createTodo} className={classnames(classes['action-button'], classes['add-action-button'])} title={'Add todo.'}> 
-                    <MdAdd size={24}/>
-                </div>
-                <div onClick={props.deleteSelectedTodos} className={deleteButtonClasses} title={'Add todo.'}> 
-                    <MdDelete size={24}/>
+            <div className={classes['menu']}>
+                <div className={classes['actions']}>
+                    <div onClick={goBack} className={goBackClasses} title={'Go back.'}> 
+                        <MdArrowUpward size={24}/>
+                    </div> 
+                    <div onClick={props.deleteSelectedTodos} className={deleteButtonClasses} title={'Delete selected todos.'}> 
+                        <MdDelete size={24}/>
+                    </div>
+                    <div className={inputNewTodoClasses}>
+                        <input ref={inputNewTodoRef} onKeyUp={onInputNewTodoKeyUp} type="text" placeholder="Name a new todo..."/>
+                    </div>
+                    <div onClick={showInputNewTodo} className={classnames(classes['action-button'], classes['add-action-button'])} title={'Add todo.'}> 
+                        <MdAdd size={24}/>
+                    </div>
                 </div>
             </div>
             {toBeRendered}

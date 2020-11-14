@@ -10,7 +10,7 @@ function ErrorMessage(props){
 
     return (
         <AnimateHeight
-            className={props.className}
+            className={classes["error-message-wrapper"]}
             duration={200}
             height={props.message === undefined ? 0:'auto'}
         >

@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from './style.module.css';
+import styles from './style.module.css';
 
 function Layer(props){
     let {wrapper, component} = {...props};
@@ -11,7 +11,7 @@ function Layer(props){
         content = component === null ? null:component();
 
     return (
-        <div style={{display: component === null ? 'none':'block'}} className={classes.Layer}>
+        <div style={{display: component === null ? 'none':'block'}} className={styles.Layer}>
             {content}
         </div>
     )
@@ -26,7 +26,7 @@ function Overlay(props){
     }
 
     return (
-        <div {...otherProps} className={classes.Overlay + ' ' + className}>
+        <div {...otherProps} className={styles.Overlay + ' ' + className}>
             <Layer wrapper={wrapper} component={stateComponent}/>
             {props.children}
         </div>

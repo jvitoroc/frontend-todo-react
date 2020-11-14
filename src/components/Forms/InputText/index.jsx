@@ -1,20 +1,23 @@
 import React from 'react';
 import { Field } from 'formik';
+import classnames from 'classnames';
 import ErrorMessage from '../ErrorMessage';
-import classes from './style.module.css';
+import styles from './style.module.css';
 
 function InputText(props = {password: false}){
     let {name, label, value, error, password} = {...props};
-    let inputClasses = classes['input'] 
-    inputClasses += (value === "" ? ' ' + classes["empty"]:"")
-    inputClasses += (error ? ' ' + classes["error"]:"")
+    let inputClasses = classnames(
+        styles.input,
+        {[styles.empty]: value === ""},
+        {[styles.error]: value === ""}
+    );
     
     return (
-        <div className={classes.InputText}>
+        <div className={styles.InputText}>
             <Field id={name} className={inputClasses} type={password ? "password":"text"} name={name}/>
-            <label className={classes["label"]} htmlFor={name}>{label}</label>
+            <label className={styles.label} htmlFor={name}>{label}</label>
             <ErrorMessage message={error}/>
-            <div className={classes['gap']}></div>
+            <div className={styles.label}></div>
         </div> 
     );
 }

@@ -29,7 +29,7 @@ function BaseForm(props){
                     {(formProps) => {
                         return (
                             <Form>
-                                <ErrorMessage className={classes['error-message']} message={formProps.errors['*']}/>
+                                <ErrorMessage message={formProps.errors['*']}/>
                                 {children(formProps)}
                             </Form>
                         )

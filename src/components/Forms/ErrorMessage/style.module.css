@@ -5,3 +5,7 @@
     font-size: 12px;
     box-sizing: border-box;
 }
+
+.error-message-wrapper{
+    margin-bottom: 10px;
+}

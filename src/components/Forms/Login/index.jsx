@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import classes from '../common.module.css';
+import styles from '../common.module.css';
 import BaseForm from '../BaseForm';
 import Button from '../Button';
 import { withRouter, Link } from 'react-router-dom';
@@ -63,7 +63,7 @@ function Login(props){
             validate={validateForm}
             onSubmit={handleSubmit}
             state={formState}
-            after={<Link className={classes['link']} to={'/signup'}>Create an account</Link>}
+            after={<Link className={styles.link} to={'/signup'}>Create an account</Link>}
         >
             {({ isSubmitting, errors, values })=>{
                 return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from '../common.module.css';
+import styles from '../common.module.css';
 import BaseForm from '../BaseForm';
 import Button from '../Button';
 import { withRouter, Link } from 'react-router-dom';
@@ -63,7 +63,7 @@ function Signup(props){
             validate={validateForm}
             onSubmit={handleSubmit}
             state={formState}
-            after={<Link className={classes['link']} to={'/login'}>Already have an account? Log in</Link>}
+            after={<Link className={styles.link} to={'/login'}>Already have an account? Log in</Link>}
         >
             {({ isSubmitting, errors, values })=>{
                 return (

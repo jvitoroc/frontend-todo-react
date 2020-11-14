@@ -34,7 +34,7 @@ function AppRoute(props){
     return (    
         <Route exact path={props.path}>
             {() => (
-                <div className={classes['page']}>
+                <div className={classes.page}>
                     {<props.children/>}
                 </div>
             )}

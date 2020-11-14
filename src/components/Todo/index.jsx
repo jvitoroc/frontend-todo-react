@@ -51,8 +51,7 @@ function Todo(props) {
     // }
 
     const onEdit = () => {
-        if(!props.new)
-            props.toggleEditMode();
+        props.toggleEditMode();
     }
 
     const onClick = (e) => {
@@ -65,8 +64,7 @@ function Todo(props) {
     }
     
     const onComplete = ()=>{
-        if(!props.new)
-            props.onComplete();
+        props.onComplete();
     }
 
     const onTextBlur = (e) => {
@@ -79,11 +77,9 @@ function Todo(props) {
     }
 
     const onContextMenu = (e) => {
-        if(!props.new){
-            e.preventDefault();
-            setPopupMenu({open: true, posX: e.clientX, posY: e.clientY})
-            return false;
-        }
+        e.preventDefault();
+        setPopupMenu({open: true, posX: e.clientX, posY: e.clientY})
+        return false;
     }
 
     let checkClasses = classnames(classes['check-icon'], props.completed ? classes['checked'] : '');

@@ -22,11 +22,8 @@ body{
     height: 100%;
 }
 
-.loading-spinner{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+.App{
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .App :global(.transition-enter),
@@ -51,4 +48,11 @@ body{
     opacity: 0;
     transform: scale(0.9);
     transition: opacity 300ms, transform 300ms;
+}
+
+.loading-spinner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }

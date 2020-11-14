@@ -9,7 +9,6 @@ input:-internal-autofill-selected{
     outline: none;
     padding: 8px 6px 5px 6px;
     width: 100%;
-    font-family: Roboto;
     font-size: 16px;
     font-weight: 300;
     color: #646464 !important;

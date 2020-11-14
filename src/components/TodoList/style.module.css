@@ -1,7 +1,6 @@
 .TodoList{
     margin: 0 auto;
     max-width: 700px;
-    font-family: Roboto;
     font-size: 24px;
     font-weight: 300;
     color: #8d8d8d;
@@ -21,6 +20,7 @@
 .todo-list-title > div{
     max-height: 215px;
     max-width: 95%;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     position: absolute;
@@ -29,6 +29,7 @@
 
 .actions{
     display: flex;
+    flex-grow: 1;
 }
 
 .action-button{
@@ -86,4 +87,50 @@
     opacity: 0;
     max-height: 0px;
     transition: 0.4s ease-out;
+}
+
+.input-new-todo{
+    display: flex;
+    align-items: center;
+    /* flex-grow: 1; */
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: 0px;
+    overflow: hidden;
+    transition: 0.2s;
+}
+
+.input-new-todo.active{
+    flex-grow: 1;
+}
+
+.input-new-todo > input{
+    width: 100%;
+    padding: 5px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 2px solid rgb(240, 240, 240);
+    /* border-radius: 5px; */
+    font-size: 16px;
+    color: rgb(140, 140, 140);
+    margin: 0 10px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-new-todo.error > input{
+    border-color: #ff5454 !important;
+}
+
+.input-new-todo > input:focus{
+    border-color: rgb(220, 220, 220);
+}
+
+.input-new-todo > input::placeholder{
+    color: rgb(180, 180, 180);
+}
+
+.menu{
+    display: flex;
 }
