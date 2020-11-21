@@ -1,8 +1,9 @@
 import React from 'react';
+import classnames from 'classnames';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { logout } from '../../actions';
-import classes from './style.module.css'
+import { userActions } from '../../actions';
+import styles from './style.module.css'
 
 function Topbar(props){
     const handleLogout = ()=>{
@@ -13,16 +14,16 @@ function Topbar(props){
     let pathname = props.location.pathname;
 
     if(props.authenticated){
-        items.push(<div key={1} className={classes['text']}>Logged in as <span className={classes['bold']}>{props.info.username}</span></div>);
-        items.push(<button key={2} className={classes['button'] + ' ' + classes['text']} onClick={handleLogout} href="#">Logout</button>);
+        items.push(<div key={1} className={styles.text}>Logged in as <span className={styles.bold}>{props.info.username}</span></div>);
+        items.push(<button key={2} className={classnames(styles.button, styles.text)} onClick={handleLogout} href="#">Logout</button>);
     }else if(pathname === '/login'){
-        items.push(<Link key={3} className={classes['button'] + ' ' + classes['text']} to='/signup'>Sign up</Link>);
+        items.push(<Link key={3} className={classnames(styles.button, styles.text)} to='/signup'>Sign up</Link>);
     }else if(pathname === '/signup'){
-        items.push(<Link key={4} className={classes['button'] + ' ' + classes['text']} to='/login'>Log in</Link>);
+        items.push(<Link key={4} className={classnames(styles.button, styles.text)} to='/login'>Log in</Link>);
     } 
 
     return (
-        <div className={classes.Topbar}>
+        <div className={styles.Topbar}>
             {items}
         </div>
     );
@@ -35,7 +36,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         logout: () => {
-            dispatch(logout())
+            dispatch(userActions.logout())
         }
     }
 }

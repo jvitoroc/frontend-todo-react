@@ -1,28 +1,28 @@
-.input,
-input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active,
-input:-internal-autofill-selected{
-    display: block;
-    border: none;
-    outline: none;
-    padding: 8px 6px 5px 6px;
-    width: 100%;
-    font-size: 16px;
-    font-weight: 300;
-    color: #646464 !important;
-    border: 2px solid rgb(192, 192, 192);
-    box-sizing: border-box;
-    border-radius: 5px;
-}
-
 .InputText{
     position: relative;
 }
 
 .InputText:not(:last-child){
     margin-bottom: 14px;
+}
+
+.input,
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover, 
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active,
+.input:-internal-autofill-selected{
+    display: block;
+    border: none;
+    outline: none;
+    padding: 8px 6px 5px 6px;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 300;
+    color: #646464 !important;
+    border: 2px solid rgb(192, 192, 192);
+    box-sizing: border-box;
+    border-radius: 5px;
 }
 
 .input::placeholder{
@@ -46,19 +46,11 @@ input:-internal-autofill-selected{
     top: 10px;
     left: 5px;
     padding: 0 2px;
-    font-size: 15px;
+    font-size: 0.9375rem;
     transition: 0.3s;
     z-index: 1;
 }
 
 .error{
     border-color: #ff5454 !important;
-}
-
-.error-message{
-    color: #e53838;
-    padding-top: 1px;
-    font-weight: 400;
-    font-size: 12px;
-    box-sizing: border-box;
 }

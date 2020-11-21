@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './style.module.css';
+import styles from './style.module.css';
 import { Formik, Form } from 'formik';
 import Overlay from '../Overlay';
 import ErrorMessage from '../ErrorMessage';
@@ -15,12 +15,12 @@ function BaseForm(props){
     }
 
     return (
-        <div className={classes.BaseForm}>
+        <div className={styles.BaseForm}>
             <Overlay
-                className={classes["form-wrapper"]}
+                className={styles["form-wrapper"]}
                 index={index}
             >
-                <div className={classes["logo"]}/>
+                <div className={styles.logo}/>
                 <Formik
                     initialValues={initialValues}
                     validate={validate}

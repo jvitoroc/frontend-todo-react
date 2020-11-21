@@ -1,6 +1,6 @@
 import React from 'react';
 import {IoMdCheckmark} from 'react-icons/io'
-import classes from './style.module.css';
+import styles from './style.module.css';
 import classnames from 'classnames';
 import PopupMenu from '../PopupMenu';
 import {MdEdit, MdDelete} from 'react-icons/md'
@@ -82,11 +82,11 @@ function Todo(props) {
         return false;
     }
 
-    let checkClasses = classnames(classes['check-icon'], props.completed ? classes['checked'] : '');
-    let todoClasses = classnames(classes.Todo, props.selected ? classes['selected'] : '');
+    let checkClasses = classnames(styles['check-icon'], props.completed ? styles['checked'] : '');
+    let todoClasses = classnames(styles.Todo, props.selected ? styles['selected'] : '');
 
     return (
-        <div className={classes["todo-wrapper"]}>
+        <div className={styles["todo-wrapper"]}>
             <div onContextMenu={onContextMenu} className={todoClasses}>
                 <PopupMenu
                     show={popupMenu.open}
@@ -99,7 +99,7 @@ function Todo(props) {
                     ]}
                 />
                 <div onClick={onComplete} className={checkClasses}>{<IoMdCheckmark size={32}/>}</div>
-                <div onClick={onClick} onKeyDown={onKeyDown} onBlur={onTextBlur} className={classes['text']}>
+                <div onClick={onClick} onKeyDown={onKeyDown} onBlur={onTextBlur} className={styles['text']}>
                     <div ref={textRef} suppressContentEditableWarning={true} contentEditable={props.editingDescription} tabIndex={props.editingDescription ? 0:undefined}>
                         {props.description}
                     </div>

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import classes from './style.module.css';
+import styles from './style.module.css';
 import AnimateHeight from 'react-animate-height';
 
 function ErrorMessage(props){
@@ -10,11 +10,11 @@ function ErrorMessage(props){
 
     return (
         <AnimateHeight
-            className={classes["error-message-wrapper"]}
+            className={styles["error-message-wrapper"]}
             duration={200}
             height={props.message === undefined ? 0:'auto'}
         >
-            <div className={classes["error-message"]}>{lastMessageRef.current}</div>
+            <div className={styles["error-message"]}>{lastMessageRef.current}</div>
         </AnimateHeight>
     );
 }

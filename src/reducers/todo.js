@@ -1,19 +1,8 @@
 import {
-    combineReducers
-} from 'redux'
+    todoActions
+} from '../actions'
 
-import {
-    ADD_TODO,
-    SELECT_TODO,
-	REQUEST_TODOS,
-	RECEIVE_TODOS,
-	TOGGLE_EDIT_MODE,
-	RECEIVE_USER,
-	RECEIVE_USER_FAILED,
-	LOGOUT_USER
-} from './actions.js'
-
-function todos(state = {
+function todo(state = {
 	allowDeletion: false,
 	isFetching: false,
 	fetched: false,
@@ -22,8 +11,8 @@ function todos(state = {
     data: []
 }, action) {
     switch (action.type) {
-		case ADD_TODO:
-		case SELECT_TODO:
+		case todoActions.CREATE_TODO:
+		case todoActions.SELECT_TODO:
 			let newTodos = state.data.map((todo) => {
 				if (todo.todoId === action.todoId) {
 					return Object.assign({}, todo, {
@@ -39,7 +28,7 @@ function todos(state = {
 				}, false),
 				data: newTodos
 			}
-		case TOGGLE_EDIT_MODE:
+		case todoActions.TOGGLE_EDIT_MODE:
 			return {
 				...state,
 				data: state.data.map((todo) => {
@@ -51,14 +40,14 @@ function todos(state = {
 					return todo
 				})
 			}
-		case REQUEST_TODOS:
+		case todoActions.FETCH_TODOS:
 			return {
 				...state,
 				isFetching: true,
 				allowDeletion: false,
 				fetched: action.parentTodoId === state.parentTodoId
 			}
-		case RECEIVE_TODOS:
+		case todoActions.RECEIVE_TODOS:
 			return {
 				...state,
 				allowDeletion: false,
@@ -74,31 +63,4 @@ function todos(state = {
     }
 } 
 
-function user(state = {loading: true, authenticated: false}, action) {
-    switch (action.type) {
-		case RECEIVE_USER:
-			return {
-				...state,
-				info: action.user,
-				loading: false,
-				authenticated: true
-			}
-		case LOGOUT_USER:
-		case RECEIVE_USER_FAILED:
-			return {
-				...state,
-				loading: false,
-				authenticated: false,
-				info: {}
-			}
-		default:
-			return state
-    }
-} 
-
-const todoApp = combineReducers({
-	todos,
-	user
-});
-
-export default todoApp
+export default todo

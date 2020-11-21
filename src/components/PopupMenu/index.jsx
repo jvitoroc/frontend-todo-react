@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from './style.module.css';
+import styles from './style.module.css';
 
 function PopupMenuItem(props){
     const onClick = (e) => {
@@ -9,7 +9,7 @@ function PopupMenuItem(props){
     }
     
     return (
-        <div className={classes.PopupMenuItem} onClick={onClick}>
+        <div className={styles.PopupMenuItem} onClick={onClick}>
             {/* <div className={classes['icon']}>{props.icon}</div> */}
             <div>{props.label}</div>
         </div>
@@ -22,8 +22,8 @@ function PopupMenu(props){
     });
     
     return (
-        <div onClick={props.onClose} className={classes['popupmenu-back']} style={{display: props.show ? 'block':'none'}}>
-            <div className={classes.PopupMenu} style={{top: props.posY + 'px', left: props.posX + 'px'}}>
+        <div onClick={props.onClose} className={styles['popupmenu-back']} style={{display: props.show ? 'block':'none'}}>
+            <div className={styles.PopupMenu} style={{top: props.posY + 'px', left: props.posX + 'px'}}>
                 {items}        
             </div>
         </div>

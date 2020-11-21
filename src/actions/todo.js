@@ -1,27 +1,16 @@
 import fetch from 'cross-fetch';
 
-export const ADD_TODO = 'ADD_TODO'
-export const RECEIVE_TODO = 'RECEIVE_TODO'
+export const CREATE_TODO = 'CREATE_TODO'
 export const DELETE_TODO = 'DELETE_TODO'
-export const EDIT_TODO_DESCRIPTION = 'EDIT_TODO_DESCRIPTION'
-export const COMPLETE_TODO = 'COMPLETE_TODO'
+export const UPDATE_TODO = 'UPDATE_TODO'
 export const SELECT_TODO = 'SELECT_TODO'
 export const TOGGLE_EDIT_MODE = 'TOGGLE_EDIT_MODE'
 
-export const REQUEST_TODOS = 'REQUEST_TODOS'
+export const FETCH_TODOS = 'FETCH_TODOS'
 export const RECEIVE_TODOS = 'RECEIVE_TODOS'
-export const RECEIVE_USER = 'RECEIVE_USER'
-export const RECEIVE_USER_FAILED = 'RECEIVE_USER_FAILED'
-export const LOGOUT_USER = 'LOGOUT_USER'
-
-export const MODIFY_TODO = 'MODIFY_TODO'
 
 export function addTodo() {
-	return { type: ADD_TODO }
-}
-
-export function receiveTodo(json) {
-	return { type: RECEIVE_TODO, todo: Object.assign({editingDescription: false}, json.data) };
+	return { type: CREATE_TODO }
 }
   
 export function selectTodo(todoId) {
@@ -32,39 +21,8 @@ export function toggleEditMode(todoId) {
 	return { type: TOGGLE_EDIT_MODE, todoId }
 }
 
-export function logoutUser() {
-	return { type: LOGOUT_USER }
-}
-
 export function requestTodos(parentTodoId) {
-	return { type: REQUEST_TODOS, parentTodoId }
-}
-
-export function receiveUser(data) {
-	return {
-		type: RECEIVE_USER,
-		user: data
-	}
-}
-
-export function receiveUserFailed() {
-	return {
-		type: RECEIVE_USER_FAILED
-	}
-}
-
-export function loginSucessfull(data) {
-	return function (dispatch) {
-		localStorage.setItem("token", data.token);
-		dispatch(receiveUser(data.user));
-	}
-}
-
-export function logout() {
-	return function (dispatch) {
-		localStorage.removeItem("token");
-		dispatch(logoutUser());
-	}
+	return { type: FETCH_TODOS, parentTodoId }
 }
 
 export function receiveTodos(parentTodoId, json) {

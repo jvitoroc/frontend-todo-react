@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import styles from './style.module.css';
 
 function Layer(props){
@@ -26,7 +27,7 @@ function Overlay(props){
     }
 
     return (
-        <div {...otherProps} className={styles.Overlay + ' ' + className}>
+        <div {...otherProps} className={classnames(styles.Overlay, className)}>
             <Layer wrapper={wrapper} component={stateComponent}/>
             {props.children}
         </div>

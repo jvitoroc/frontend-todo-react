@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
-import classes from './style.module.css'
-import TodoList from '../TodoList';
-import Login from '../Forms/Login';
-import { receiveUser, receiveUserFailed } from '../../actions';
+import React, { useEffect } from 'react';
+import ReactLoading from 'react-loading';
+import {Redirect, withRouter} from 'react-router-dom'
 import {Route, Switch} from 'react-router-dom';
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
-import {Redirect, withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import Topbar from '../Topbar';
-import Signup from '../Forms/Signup';
+import styles from './style.module.css'
+import { userActions } from '../../actions';
 import {authenticateUser} from '../../utils';
-import ReactLoading from 'react-loading';
-import { useEffect } from 'react';
+import Topbar from '../Topbar';
+import Signup from '../../pages/Signup';
+import TodoList from '../../pages/TodoList';
+import Login from '../../pages/Login';
 
 function LoadingIndicator(){
     return (
@@ -23,7 +22,7 @@ function LoadingIndicator(){
             classNames="transition"
             timeout={300}
         >
-            <div className={classes['loading-spinner']}>
+            <div className={styles['loading-spinner']}>
                 <ReactLoading type={'spin'} color={'gray'} height={'50px'} width={'50px'} />
             </div>
         </CSSTransition>
@@ -34,7 +33,7 @@ function AppRoute(props){
     return (    
         <Route exact path={props.path}>
             {() => (
-                <div className={classes.page}>
+                <div className={styles.page}>
                     {<props.children/>}
                 </div>
             )}
@@ -54,15 +53,12 @@ function ProtectedRoute(props){
 
 function App(props){
     useEffect(()=>{
-        authenticateUser()
-        .then(({authenticated, user})=>{
-            if(authenticated){
-                props.receiveUser(user);
-            }else{
-                localStorage.removeItem("token");
-                props.receiveUserFailed();
-            }
-        })
+        let token = localStorage.getItem('token');
+        if(token !== null){
+            props.authenticateRequest(token);
+        }else{
+            props.authenticateFailure();
+        }
     }, []);
 
     if(props.loading){
@@ -70,9 +66,9 @@ function App(props){
     }
 
     return (
-        <div className={classes.App}>
+        <div className={styles.App}>
             <Topbar/>
-            <div className={classes['pages-wrapper']}>
+            <div className={styles['pages-wrapper']}>
                 <TransitionGroup>
                     <CSSTransition
                         appear
@@ -123,11 +119,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        receiveUser: (data) => {
-            dispatch(receiveUser(data))
+        authenticateRequest: (token) => {
+            dispatch(userActions.authenticateRequest(token))
         },
-        receiveUserFailed: (data) => {
-            dispatch(receiveUserFailed(data))
+        authenticateFailure: () => {
+            dispatch(userActions.authenticateFailure())
         }
     }
 }

@@ -9,7 +9,7 @@ function InputText(props = {password: false}){
     let inputClasses = classnames(
         styles.input,
         {[styles.empty]: value === ""},
-        {[styles.error]: value === ""}
+        {[styles.error]: error}
     );
     
     return (

@@ -1,11 +1,11 @@
 import React from 'react';
-import styles from '../common.module.css';
-import BaseForm from '../BaseForm';
-import Button from '../Button';
+import styles from '../../components/Forms/common.module.css';
+import BaseForm from '../../components/Forms/BaseForm';
+import Button from '../../components/Forms/Button';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { loginSucessfull } from '../../../actions';
-import InputText from '../InputText';
+import { userActions } from '../../actions';
+import InputText from '../../components/Forms/InputText';
 import { useState } from 'react';
 
 function Signup(props){
@@ -86,7 +86,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         loginSucessfull: (data) => {
-            dispatch(loginSucessfull(data))
+            dispatch(userActions.loginSucessfull(data))
         }
     }
 }

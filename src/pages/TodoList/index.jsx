@@ -1,8 +1,8 @@
 import React, {  useEffect } from 'react';
 import { connect } from 'react-redux'
-import Todo from '../Todo';
-import { createTodo, selectTodo, deleteSelectedTodos, deleteTodo, fetchTodos, toggleEditMode, updateTodo } from '../../actions';
-import classes from './style.module.css';
+import Todo from '../../components/Todo';
+import { todoActions } from '../../actions';
+import styles from './style.module.css';
 import {MdAdd, MdDelete, MdArrowUpward} from 'react-icons/md'
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {withRouter} from 'react-router-dom';
@@ -75,7 +75,7 @@ function TodoList(props){
 
     const goBack = () => {
         if(props.match.params.parentTodoId !== undefined){
-            let grandParentTodoId = props.todos.grandParentTodoId;
+            let grandParentTodoId = props.todo.grandParentTodoId;
             props.history.push(`/todos/${grandParentTodoId ? grandParentTodoId:''}`)
         }
     }
@@ -89,8 +89,8 @@ function TodoList(props){
         else
             return 'Good evening, here are your todos';
     }
-
-    let todos = props.todos.data.map((e) => {
+    
+    let todos = props.todo.data.map((e) => {
             return (
                 <CSSTransition
                     key={e.todoId}
@@ -111,17 +111,17 @@ function TodoList(props){
         }
     );
 
-    let deleteButtonClasses = classnames(classes['action-button'], classes['delete-action-button'], !props.todos.allowDeletion ? classes['disabled']:'')
-    let goBackClasses = classnames(classes['action-button'], props.match.params.parentTodoId === undefined ? classes['disabled']:'');
+    let deleteButtonClasses = classnames(styles['action-button'], styles['delete-action-button'], !props.todo.allowDeletion ? styles['disabled']:'')
+    let goBackClasses = classnames(styles['action-button'], props.match.params.parentTodoId === undefined ? styles['disabled']:'');
     let inputNewTodoClasses = classnames(
-        classes['input-new-todo'],
-        inputNewTodoActive === true ? classes['active']:'',
-        inputNewTodoError === true ? classes['error']:''
+        styles['input-new-todo'],
+        inputNewTodoActive === true ? styles['active']:'',
+        inputNewTodoError === true ? styles['error']:''
     );
 
     let toBeRendered = null;
     
-    if(props.todos.fetched){
+    if(props.todo.fetched){
         toBeRendered = (
             <TransitionGroup appear>    
                 {todos}
@@ -129,17 +129,17 @@ function TodoList(props){
         );
     }
 
-    let title = props.match.params.parentTodoId ? props.todos.parentTodoDescription:getWelcomeText();
+    let title = props.match.params.parentTodoId ? props.todo.parentTodoDescription:getWelcomeText();
 
     return (
-        <div className={classes.TodoList}>
-            <div className={classes['todo-list-title']}>
+        <div className={styles.TodoList}>
+            <div className={styles['todo-list-title']}>
                 <div title={title}>
                     {title}
                 </div>
             </div>
-            <div className={classes['menu']}>
-                <div className={classes['actions']}>
+            <div className={styles.menu}>
+                <div className={styles.actions}>
                     <div onClick={goBack} className={goBackClasses} title={'Go back.'}> 
                         <MdArrowUpward size={24}/>
                     </div> 
@@ -149,7 +149,7 @@ function TodoList(props){
                     <div className={inputNewTodoClasses}>
                         <input ref={inputNewTodoRef} onKeyUp={onInputNewTodoKeyUp} type="text" placeholder="Name a new todo..."/>
                     </div>
-                    <div onClick={showInputNewTodo} className={classnames(classes['action-button'], classes['add-action-button'])} title={'Add todo.'}> 
+                    <div onClick={showInputNewTodo} className={classnames(styles['action-button'], styles['add-action-button'])} title={'Add todo.'}> 
                         <MdAdd size={24}/>
                     </div>
                 </div>
@@ -166,28 +166,28 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         completeTodo: (todoId, completed) => {
-            dispatch(updateTodo(todoId, {completed}))
+            dispatch(todoActions.updateTodo(todoId, {completed}))
         },
         selectTodo: todoId => {
-            dispatch(selectTodo(todoId))
+            dispatch(todoActions.selectTodo(todoId))
         },
         toggleEditMode: todoId => {
-            dispatch(toggleEditMode(todoId))
+            dispatch(todoActions.toggleEditMode(todoId))
         },
         createTodo: (parentTodoId, description) => {
-            dispatch(createTodo(parentTodoId, description))
+            dispatch(todoActions.createTodo(parentTodoId, description))
         },
         editTodoDescription: (todoId, description) => {
-            dispatch(updateTodo(todoId, {description}))
+            dispatch(todoActions.updateTodo(todoId, {description}))
         },
         deleteSelectedTodos: () => {
-            dispatch(deleteSelectedTodos())
+            dispatch(todoActions.deleteSelectedTodos())
         },
         deleteTodo: todoId => {
-            dispatch(deleteTodo(todoId))
+            dispatch(todoActions.deleteTodo(todoId))
         },
         fetchTodos: (parentTodoId) => {
-            dispatch(fetchTodos(parentTodoId))
+            dispatch(todoActions.fetchTodos(parentTodoId))
         }
     }
 }

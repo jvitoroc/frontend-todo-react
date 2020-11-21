@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import styles from '../common.module.css';
-import BaseForm from '../BaseForm';
-import Button from '../Button';
+import styles from '../../components/Forms/common.module.css';
+import BaseForm from '../../components/Forms/BaseForm';
+import Button from '../../components/Forms/Button';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { loginSucessfull } from '../../../actions';
-import InputText from '../InputText';
+import { userActions } from '../../actions';
+import InputText from '../../components/Forms/InputText';
 
 function Login(props){
     const [formState, setFormState] = useState(null);
@@ -21,29 +21,13 @@ function Login(props){
 	}
 
     const handleSubmit = (values, { setSubmitting, setErrors })=>{
-        setFormState('LOADING');
-        login(values.username, values.password)
-        .then(
-            async response => {
-                await new Promise((r)=>setTimeout(r, 250));
-                let json = await response.json();
-                if(response.ok === false){
-                    setErrors({"*": json.errors ? '':json.message, ...json.errors});
-                    setSubmitting(false);
-                    setFormState(null);
-                }
-                else{
-                    setFormState('SUCCESS');
-                    setTimeout(()=>props.loginSucessfull(json.data), 1000);
-                }
-            }
-        )
-    }
-
-    const changeFormState = (name, callback)=>{
-        this.setState({formState: name}, ()=>{
-            if (callback) callback();
-        })
+        props.loginRequest(values.username, values.password);
+        // .then(()=>{
+        //     setErrors({"*": props.user.loginRequestErrors.errors ? '':props.user.loginRequestErrors.message, ...props.user.loginRequestErrors.errors});
+        // });
+        // if(props.user.state === 'FAILURE')
+        
+        setSubmitting(false);
     }
 
     const validateForm = (values)=>{
@@ -62,7 +46,7 @@ function Login(props){
             initialValues={{ username: '', password: '', repeatPassword: '', '*': ''}}
             validate={validateForm}
             onSubmit={handleSubmit}
-            state={formState}
+            state={props.user.state}
             after={<Link className={styles.link} to={'/signup'}>Create an account</Link>}
         >
             {({ isSubmitting, errors, values })=>{
@@ -85,10 +69,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loginSucessfull: (data) => {
-            dispatch(loginSucessfull(data))
+        loginRequest: (username, password) => {
+            dispatch(userActions.loginRequest(username, password))
         }
-    }
+    };
 }
 
 const ConnectedLogin = connect(mapStateToProps, mapDispatchToProps)(Login);
