@@ -14,7 +14,7 @@ function Topbar(props){
     let pathname = props.location.pathname;
 
     if(props.authenticated){
-        items.push(<div key={1} className={styles.text}>Logged in as <span className={styles.bold}>{props.info.username}</span></div>);
+        items.push(<div key={1} className={styles.text}>Logged in as <span className={styles.bold}>{props.user.username}</span></div>);
         items.push(<button key={2} className={classnames(styles.button, styles.text)} onClick={handleLogout} href="#">Logout</button>);
     }else if(pathname === '/login'){
         items.push(<Link key={3} className={classnames(styles.button, styles.text)} to='/signup'>Sign up</Link>);

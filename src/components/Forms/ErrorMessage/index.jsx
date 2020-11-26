@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import styles from './style.module.css';
 import AnimateHeight from 'react-animate-height';
 

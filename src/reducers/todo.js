@@ -11,7 +11,6 @@ function todo(state = {
     data: []
 }, action) {
     switch (action.type) {
-		case todoActions.CREATE_TODO:
 		case todoActions.SELECT_TODO:
 			let newTodos = state.data.map((todo) => {
 				if (todo.todoId === action.todoId) {

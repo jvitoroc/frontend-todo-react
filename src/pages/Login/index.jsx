@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from '../../components/Forms/common.module.css';
 import BaseForm from '../../components/Forms/BaseForm';
 import Button from '../../components/Forms/Button';
@@ -8,26 +8,8 @@ import { userActions } from '../../actions';
 import InputText from '../../components/Forms/InputText';
 
 function Login(props){
-    const [formState, setFormState] = useState(null);
-
-    const login = (username, password)=>{
-		const init = {
-			method: 'POST',
-			body: JSON.stringify({username, password}),
-			headers: {'Content-Type': 'application/json'}
-		}
-
-		return fetch('http://localhost:8000/user/session', init);
-	}
-
     const handleSubmit = (values, { setSubmitting, setErrors })=>{
-        props.loginRequest(values.username, values.password);
-        // .then(()=>{
-        //     setErrors({"*": props.user.loginRequestErrors.errors ? '':props.user.loginRequestErrors.message, ...props.user.loginRequestErrors.errors});
-        // });
-        // if(props.user.state === 'FAILURE')
-        
-        setSubmitting(false);
+        props.loginRequest(values.username, values.password, setSubmitting, setErrors);
     }
 
     const validateForm = (values)=>{
@@ -43,10 +25,10 @@ function Login(props){
 
     return (
         <BaseForm
-            initialValues={{ username: '', password: '', repeatPassword: '', '*': ''}}
+            initialValues={{ username: '', password: '', repeatPassword: '', '*': '' }}
             validate={validateForm}
             onSubmit={handleSubmit}
-            state={props.user.state}
+            state={props.user.currentState}
             after={<Link className={styles.link} to={'/signup'}>Create an account</Link>}
         >
             {({ isSubmitting, errors, values })=>{
@@ -62,15 +44,14 @@ function Login(props){
     );
 }
 
-
 const mapStateToProps = (state) => {
     return {...state};
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        loginRequest: (username, password) => {
-            dispatch(userActions.loginRequest(username, password))
+        loginRequest: (username, password, setSubmitting, setErrors) => {
+            dispatch(userActions.loginRequest(username, password, setSubmitting, setErrors));
         }
     };
 }

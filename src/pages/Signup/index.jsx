@@ -2,43 +2,17 @@ import React from 'react';
 import styles from '../../components/Forms/common.module.css';
 import BaseForm from '../../components/Forms/BaseForm';
 import Button from '../../components/Forms/Button';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../../actions';
 import InputText from '../../components/Forms/InputText';
-import { useState } from 'react';
 
 function Signup(props){
-    const [formState, setFormState] = useState(null);
-
-    const signUp = (username, password)=>{
-		const init = {
-			method: 'POST',
-			body: JSON.stringify({username, password}),
-			headers: {'Content-Type': 'application/json'}
-		}
-
-		return fetch('http://localhost:8000/user/', init);
-	}
-
+    let history = useHistory();
     const handleSubmit = (values, { setSubmitting, setErrors })=>{
-        setFormState('LOADING');
-        signUp(values.username, values.password)
-        .then(
-            async response => {
-                await new Promise((r)=>setTimeout(r, 250));
-                let json = await response.json();
-                if(response.ok === false){
-                    setErrors({"*": json.errors ? '':json.message, ...json.errors});
-                    setSubmitting(false);
-                    setFormState(null);
-                }
-                else{
-                    setFormState('SUCCESS');
-                    setTimeout(()=>props.history.push('/login'), 1000);
-                }
-            }
-        )
+        props.registerRequest(values.username, values.password, setSubmitting, setErrors, ()=>{
+            history.push('/login');
+        });
     };
 
     const validateForm = (values)=>{
@@ -62,7 +36,7 @@ function Signup(props){
             initialValues={{ username: '', password: '', repeatPassword: '' }}
             validate={validateForm}
             onSubmit={handleSubmit}
-            state={formState}
+            state={props.user.currentState}
             after={<Link className={styles.link} to={'/login'}>Already have an account? Log in</Link>}
         >
             {({ isSubmitting, errors, values })=>{
@@ -85,10 +59,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loginSucessfull: (data) => {
-            dispatch(userActions.loginSucessfull(data))
+        registerRequest: (username, password, setSubmitting, setErrors, goToLoginPage) => {
+            dispatch(userActions.registerRequest(username, password, setSubmitting, setErrors, goToLoginPage));
         }
-    }
+    };
 }
 
 const ConnectedSignup = connect(mapStateToProps, mapDispatchToProps)(Signup);

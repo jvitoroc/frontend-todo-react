@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styles from './style.module.css';
 import { Formik, Form } from 'formik';
 import Overlay from '../Overlay';
@@ -9,8 +9,8 @@ function BaseForm(props){
     let index;
     
     switch(state){
-        case 'LOADING': index = 0; break;
-        case 'SUCCESS': index = 1; break;
+        case 'REGISTER_REQUEST': case 'LOGIN_REQUEST': index = 0; break;
+        case 'REGISTER_SUCCESS':case 'LOGIN_SUCCESS': index = 1; break;
         default: index = -1;
     }
 

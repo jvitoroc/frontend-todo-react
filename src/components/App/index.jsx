@@ -6,7 +6,6 @@ import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {connect} from 'react-redux'
 import styles from './style.module.css'
 import { userActions } from '../../actions';
-import {authenticateUser} from '../../utils';
 import Topbar from '../Topbar';
 import Signup from '../../pages/Signup';
 import TodoList from '../../pages/TodoList';
@@ -61,7 +60,7 @@ function App(props){
         }
     }, []);
 
-    if(props.loading){
+    if(props.currentState === userActions.AUTHENTICATE_REQUEST){
         return <LoadingIndicator/>
     }
 
@@ -104,7 +103,7 @@ function App(props){
                             >
                                 {TodoList}
                             </ProtectedRoute>
-                            <Redirect to="/404"/>
+                            {/* <Redirect to="/404"/> */}
                         </Switch>
                     </CSSTransition>
                 </TransitionGroup>
@@ -113,17 +112,17 @@ function App(props){
     );
 }
 
-const mapStateToProps = (state) => {
-    return {loading: state.user.loading, authenticated: state.user.authenticated};
+const mapStateToProps = ({user}) => {
+    return {currentState: user.currentState, authenticated: user.authenticated};
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         authenticateRequest: (token) => {
-            dispatch(userActions.authenticateRequest(token))
+            dispatch(userActions.authenticateRequest(token));
         },
         authenticateFailure: () => {
-            dispatch(userActions.authenticateFailure())
+            dispatch(userActions.authenticateFailure());
         }
     }
 }

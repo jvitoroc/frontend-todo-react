@@ -2,49 +2,76 @@ import {
 	userActions
 } from '../actions'
 
-function user(state = {loading: true, authenticated: false}, action) {
+function user(state = {authenticated: false}, action) {
     switch (action.type) {
 		case userActions.LOGIN_REQUEST:
 			return {
 				...state,
-				state: 'LOADING',
-				authenticated: false
+				currentState: 'LOGIN_REQUEST'
 			}
 		case userActions.LOGIN_SUCCESS:
 			return {
 				...state,
-				info: action.user,
-				state: 'SUCCESS',
-				authenticated: true
+				token: action.token,
+				currentState: 'LOGIN_SUCCESS'
 			}
 		case userActions.LOGIN_FAILURE:
 			return {
 				...state,
-				info: action.user,
-				loginRequestErrors: action.errors,
-				state: 'FAILURE',
-				authenticated: false
+				user: null,
+				authenticated: false,
+				token: null,
+				currentState: 'LOGIN_FAILURE'
 			}
-		case userActions.LOGOUT_SUCCESS:
+		case userActions.REGISTER_REQUEST:
 			return {
 				...state,
-				loading: false,
+				currentState: 'REGISTER_REQUEST'
+			}
+		case userActions.REGISTER_SUCCESS:
+			return {
+				...state,
+				currentState: 'REGISTER_SUCCESS'
+			}
+		case userActions.REGISTER_FAILURE:
+			return {
+				...state,
+				currentState: 'REGISTER_FAILURE'
+			}
+		case userActions.LOGOUT:
+			localStorage.removeItem('token');
+			return {
+				...state,
+				user: null,
 				authenticated: false,
-				state: null,
-				info: {}
+				token: null,
+				currentState: 'LOGOUT'
+			}
+		case userActions.AUTHENTICATE_REQUEST:
+			return {
+				...state,
+				currentState: 'AUTHENTICATE_REQUEST'
 			}
 		case userActions.AUTHENTICATE_SUCCESS:
 			return {
 				...state,
-				info: action.user,
-				loading: false,
-				authenticated: true
+				user: action.user,
+				authenticated: true,
+				token: action.token,
+				currentState: 'AUTHENTICATE_SUCCESS'
 			}
 		case userActions.AUTHENTICATE_FAILURE:
 			return {
 				...state,
-				loading: false,
-				authenticated: false
+				user: null,
+				authenticated: false,
+				token: null,
+				currentState: 'AUTHENTICATE_FAILURE'
+			}
+		case userActions.CLEAR_STATE:
+			return {
+				...state,
+				currentState: null
 			}
 		default:
 			return state

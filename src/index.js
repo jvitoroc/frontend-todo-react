@@ -3,17 +3,20 @@ import ReactDOM from 'react-dom';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import { createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux';
+import createSagaMiddleware from 'redux-saga';
+import rootSaga from './sagas';
 import todoApp from './reducers';
 
+const sagaMiddleware = createSagaMiddleware()
 const store = createStore(
 	todoApp,
 	applyMiddleware(
-		thunkMiddleware
+		sagaMiddleware
 	)
 );
+sagaMiddleware.run(rootSaga)
 
 ReactDOM.render(
 	// <React.StrictMode>

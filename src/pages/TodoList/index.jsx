@@ -165,8 +165,17 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        createTodo: (parentTodoId, description) => {
+            dispatch(todoActions.createTodo(parentTodoId, description));
+        },
+        deleteTodo: todoId => {
+            dispatch(todoActions.deleteTodo(todoId));
+        },
         completeTodo: (todoId, completed) => {
-            dispatch(todoActions.updateTodo(todoId, {completed}))
+            dispatch(todoActions.updateTodo(todoId, {completed}));
+        },
+        editTodoDescription: (todoId, description) => {
+            dispatch(todoActions.updateTodo(todoId, {description}));
         },
         selectTodo: todoId => {
             dispatch(todoActions.selectTodo(todoId))
@@ -174,18 +183,9 @@ const mapDispatchToProps = dispatch => {
         toggleEditMode: todoId => {
             dispatch(todoActions.toggleEditMode(todoId))
         },
-        createTodo: (parentTodoId, description) => {
-            dispatch(todoActions.createTodo(parentTodoId, description))
-        },
-        editTodoDescription: (todoId, description) => {
-            dispatch(todoActions.updateTodo(todoId, {description}))
-        },
         deleteSelectedTodos: () => {
             dispatch(todoActions.deleteSelectedTodos())
-        },
-        deleteTodo: todoId => {
-            dispatch(todoActions.deleteTodo(todoId))
-        },
+        }, 
         fetchTodos: (parentTodoId) => {
             dispatch(todoActions.fetchTodos(parentTodoId))
         }
