@@ -11,6 +11,10 @@ export const RECEIVE_TODOS = 'RECEIVE_TODOS'
 export function createTodo(parentTodoId, description){
 	return { type: CREATE_TODO, parentTodoId, todo: {description} }
 }
+
+export function deleteTodo(todoId){
+	return { type: DELETE_TODO, todoId }
+}
   
 export function updateTodo(todoId, todo){
 	return { type: UPDATE_TODO, todoId, todo }

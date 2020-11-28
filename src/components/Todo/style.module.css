@@ -7,6 +7,7 @@
     transition: color 0.3s;
     user-select: none;
     flex-basis: 100%;
+    border-top: 1px solid rgb(238, 238, 238);
 }
 
 .Todo.selected{
@@ -55,9 +56,9 @@
 }
 
 .check-icon:hover > svg{
-    color: rgb(130, 130, 130);
+    color: rgb(140, 140, 140);
 }
 
 .check-icon.checked > svg{
-    color: rgb(100, 100, 100);
+    color: rgb(130, 130, 130);
 }

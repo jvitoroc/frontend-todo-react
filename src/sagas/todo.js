@@ -161,31 +161,3 @@ export default function* todoSaga() {
     yield takeLatest(todoActions.FETCH_TODOS, fetchTodosRequest);
     yield takeEvery('*', console.log);
 }
-
-// export function deleteSelectedTodos() {
-// 	return function (dispatch, getState) {
-// 		let state = getState();
-// 		let ids = state.todos.data.reduce((acc, todo)=>{
-// 			if(todo.selected)
-// 				return acc.concat([todo.todoId])
-// 			else
-// 				return acc
-// 		}, [])
-
-// 		const init = {
-// 			method: 'DELETE',
-// 			body: JSON.stringify({ids}),
-// 			headers: {
-// 				'Authorization': 'Bearer ' + localStorage.getItem("token"),
-// 				'Content-Type': 'application/json'
-// 			}
-// 		}
-
-// 		let parentTodoId = state.todos.parentTodoId;
-
-// 		return fetch('http://localhost:8000/todo/', init)
-// 		.then(
-// 			()=>{dispatch(fetchTodos(parentTodoId))}
-// 		)
-// 	}
-// }

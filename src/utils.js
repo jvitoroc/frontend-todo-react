@@ -1,32 +1,31 @@
-export function getUser(token){
-    const init = {
-        method: 'GET',
-        headers: {'Authorization': 'Bearer ' + token}
-    }
+import { useRef, useEffect } from 'react';
 
-    return fetch('http://localhost:8000/user/', init);
+export function setEndOfContenteditable(contentEditableElement){
+    var range, selection;
+    if(document.createRange)
+    {
+        range = document.createRange();
+        range.selectNodeContents(contentEditableElement);
+        range.collapse(false);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+    else if(document.selection)
+    { 
+        range = document.body.createTextRange();
+        range.moveToElementText(contentEditableElement);
+        range.collapse(false);
+        range.select();
+    }
 }
 
-export function authenticateUser(){
-    return new Promise((resolve)=>{
-        setTimeout(() => {
-            let token = localStorage.getItem("token");
-            if(token === null){
-                resolve({authenticated: false, user: null});
-                return;
-            }
-            getUser(token)
-            .then(
-                async (response) => {
-                    if(response.ok === false){
-                        resolve({authenticated: false, user: null});
-                    }
-                    else{
-                        let json = await response.json()
-                        resolve({authenticated: true, user: json.data});
-                    }
-                }
-            )
-        }, 500);
-    })
+export function usePrevious(value) {
+    const ref = useRef();
+
+    useEffect(() => {
+        ref.current = value;
+    }, [value]);
+
+    return ref.current;
 }

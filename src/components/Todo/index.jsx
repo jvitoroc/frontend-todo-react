@@ -1,36 +1,52 @@
-import React from 'react';
-import {IoMdCheckmark} from 'react-icons/io'
+import React, {useEffect, useState, useRef} from 'react';
+import Icon from '@mdi/react'
+import { mdiCheckboxBlankCircleOutline, mdiCheckCircleOutline, mdiCheckCircle } from '@mdi/js'
 import styles from './style.module.css';
 import classnames from 'classnames';
 import PopupMenu from '../PopupMenu';
+import {usePrevious, setEndOfContenteditable} from '../../utils.js';
 import {MdEdit, MdDelete} from 'react-icons/md'
-import { useState } from 'react';
-import { useRef } from 'react';
-import { useEffect } from 'react';
 
-function setEndOfContenteditable(contentEditableElement)
-{
-    var range, selection;
-    if(document.createRange)
-    {
-        range = document.createRange();
-        range.selectNodeContents(contentEditableElement);
-        range.collapse(false);
-        selection = window.getSelection();
-        selection.removeAllRanges();
-        selection.addRange(range);
-    }
-    else if(document.selection)
-    { 
-        range = document.body.createTextRange();
-        range.moveToElementText(contentEditableElement);
-        range.collapse(false);
-        range.select();
-    }
+
+function CheckIcon({checked, onClick}){
+    const [hovered, setHovered] = useState(false);
+    const [ignoreHover, setIgnoreHover] = useState(false);
+    const prevChecked = usePrevious(checked);
+    const prevHovered = usePrevious(hovered);
+
+    useEffect(()=>{
+        if(prevChecked !== checked)
+            setIgnoreHover(true)
+        else if(prevHovered !== hovered)
+            setIgnoreHover(false)
+    }, [checked, hovered]);
+
+    let icon;
+
+    if(ignoreHover || !hovered)
+        icon = checked ? mdiCheckCircle:mdiCheckboxBlankCircleOutline;
+    else
+        icon = mdiCheckCircleOutline;
+
+    let checkClasses = classnames(styles['check-icon'], checked ? styles['checked'] : '');
+
+    return (
+        <div
+            onMouseEnter={()=>{setHovered(true)}}
+            onMouseLeave={()=>{setHovered(false)}}
+            onClick={onClick} 
+            className={checkClasses}>
+            <Icon
+                path={icon}
+                size={1.5}
+            />
+        </div>
+    )
 }
 
-function Todo(props) {
-    const [popupMenu, setPopupMenu] = useState({open: false, posX: 0, posY: 0});
+function Todo(props){
+    const contextMenuRef = useRef(null);
+    
     const textRef = useRef(null);
 
     useEffect(()=>{
@@ -39,16 +55,6 @@ function Todo(props) {
             setEndOfContenteditable(textRef.current);
         }
     }, [props.editingDescription]);
-
-    // shouldComponentUpdate(nextProps, nextState){
-    //     if(nextProps.completed !== this.props.completed
-    //         || nextProps.selected !== this.props.selected
-    //         || nextProps.text !== this.props.text
-    //         || nextProps.editingDescription !== this.props.editingDescription
-    //         || nextState.openPopupMenu !== this.state.openPopupMenu) return true;
-        
-    //     return false;
-    // }
 
     const onEdit = () => {
         props.toggleEditMode();
@@ -76,30 +82,20 @@ function Todo(props) {
             e.target.blur();
     }
 
-    const onContextMenu = (e) => {
-        e.preventDefault();
-        setPopupMenu({open: true, posX: e.clientX, posY: e.clientY})
-        return false;
-    }
-
-    let checkClasses = classnames(styles['check-icon'], props.completed ? styles['checked'] : '');
     let todoClasses = classnames(styles.Todo, props.selected ? styles['selected'] : '');
 
     return (
         <div className={styles["todo-wrapper"]}>
-            <div onContextMenu={onContextMenu} className={todoClasses}>
+            <div ref={contextMenuRef} className={todoClasses}>
                 <PopupMenu
-                    show={popupMenu.open}
-                    posX={popupMenu.posX}
-                    posY={popupMenu.posY}
-                    onClose={()=>{setPopupMenu({open: false})}}
+                    element={contextMenuRef.current}
                     items={[
                         {icon: <MdEdit/>, label: 'Edit', onClick: onEdit},
                         {icon: <MdDelete/>, label: 'Delete', onClick: props.onDelete}
                     ]}
                 />
-                <div onClick={onComplete} className={checkClasses}>{<IoMdCheckmark size={32}/>}</div>
-                <div onClick={onClick} onKeyDown={onKeyDown} onBlur={onTextBlur} className={styles['text']}>
+                <CheckIcon onClick={onComplete} checked={props.completed}/>
+                <div onClick={onClick} onKeyDown={onKeyDown} onBlur={onTextBlur} className={styles.text}>
                     <div ref={textRef} suppressContentEditableWarning={true} contentEditable={props.editingDescription} tabIndex={props.editingDescription ? 0:undefined}>
                         {props.description}
                     </div>
