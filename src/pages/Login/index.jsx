@@ -4,7 +4,7 @@ import BaseForm from '../../components/Forms/BaseForm';
 import Button from '../../components/Forms/Button';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { userActions } from '../../actions';
+import { loginRequest } from '../../actions/user';
 import InputText from '../../components/Forms/InputText';
 
 function Login(props){
@@ -51,7 +51,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         loginRequest: (username, password, setSubmitting, setErrors) => {
-            dispatch(userActions.loginRequest(username, password, setSubmitting, setErrors));
+            dispatch(loginRequest(username, password, setSubmitting, setErrors));
         }
     };
 }

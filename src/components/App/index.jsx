@@ -5,11 +5,12 @@ import {Route, Switch} from 'react-router-dom';
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {connect} from 'react-redux'
 import styles from './style.module.css'
-import { userActions } from '../../actions';
+import { AUTHENTICATE_REQUEST, authenticateRequest, authenticateFailure } from '../../actions/user';
 import Topbar from '../Topbar';
 import Signup from '../../pages/Signup';
 import TodoList from '../../pages/TodoList';
 import Login from '../../pages/Login';
+import {NotificationCenter} from '../Notification';
 
 function LoadingIndicator(){
     return (
@@ -60,12 +61,13 @@ function App(props){
         }
     }, []);
 
-    if(props.currentState === userActions.AUTHENTICATE_REQUEST){
+    if(props.currentState === AUTHENTICATE_REQUEST){
         return <LoadingIndicator/>
     }
 
     return (
         <div className={styles.App}>
+            <NotificationCenter/>
             <Topbar/>
             <div className={styles['pages-wrapper']}>
                 <TransitionGroup>
@@ -119,10 +121,10 @@ const mapStateToProps = ({user}) => {
 const mapDispatchToProps = dispatch => {
     return {
         authenticateRequest: (token) => {
-            dispatch(userActions.authenticateRequest(token));
+            dispatch(authenticateRequest(token));
         },
         authenticateFailure: () => {
-            dispatch(userActions.authenticateFailure());
+            dispatch(authenticateFailure());
         }
     }
 }

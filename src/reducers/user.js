@@ -1,21 +1,31 @@
 import {
-	userActions
-} from '../actions'
+	LOGIN_REQUEST,
+	LOGIN_SUCCESS,
+	LOGIN_FAILURE,
+	REGISTER_REQUEST,
+	REGISTER_SUCCESS,
+	REGISTER_FAILURE,
+	LOGOUT,
+	AUTHENTICATE_REQUEST,
+	AUTHENTICATE_SUCCESS,
+	AUTHENTICATE_FAILURE,
+	CLEAR_STATE
+} from '../actions/user'
 
 function user(state = {authenticated: false}, action) {
     switch (action.type) {
-		case userActions.LOGIN_REQUEST:
+		case LOGIN_REQUEST:
 			return {
 				...state,
 				currentState: 'LOGIN_REQUEST'
 			}
-		case userActions.LOGIN_SUCCESS:
+		case LOGIN_SUCCESS:
 			return {
 				...state,
 				token: action.token,
 				currentState: 'LOGIN_SUCCESS'
 			}
-		case userActions.LOGIN_FAILURE:
+		case LOGIN_FAILURE:
 			return {
 				...state,
 				user: null,
@@ -23,22 +33,22 @@ function user(state = {authenticated: false}, action) {
 				token: null,
 				currentState: 'LOGIN_FAILURE'
 			}
-		case userActions.REGISTER_REQUEST:
+		case REGISTER_REQUEST:
 			return {
 				...state,
 				currentState: 'REGISTER_REQUEST'
 			}
-		case userActions.REGISTER_SUCCESS:
+		case REGISTER_SUCCESS:
 			return {
 				...state,
 				currentState: 'REGISTER_SUCCESS'
 			}
-		case userActions.REGISTER_FAILURE:
+		case REGISTER_FAILURE:
 			return {
 				...state,
 				currentState: 'REGISTER_FAILURE'
 			}
-		case userActions.LOGOUT:
+		case LOGOUT:
 			localStorage.removeItem('token');
 			return {
 				...state,
@@ -47,12 +57,12 @@ function user(state = {authenticated: false}, action) {
 				token: null,
 				currentState: 'LOGOUT'
 			}
-		case userActions.AUTHENTICATE_REQUEST:
+		case AUTHENTICATE_REQUEST:
 			return {
 				...state,
 				currentState: 'AUTHENTICATE_REQUEST'
 			}
-		case userActions.AUTHENTICATE_SUCCESS:
+		case AUTHENTICATE_SUCCESS:
 			return {
 				...state,
 				user: action.user,
@@ -60,7 +70,7 @@ function user(state = {authenticated: false}, action) {
 				token: action.token,
 				currentState: 'AUTHENTICATE_SUCCESS'
 			}
-		case userActions.AUTHENTICATE_FAILURE:
+		case AUTHENTICATE_FAILURE:
 			return {
 				...state,
 				user: null,
@@ -68,7 +78,7 @@ function user(state = {authenticated: false}, action) {
 				token: null,
 				currentState: 'AUTHENTICATE_FAILURE'
 			}
-		case userActions.CLEAR_STATE:
+		case CLEAR_STATE:
 			return {
 				...state,
 				currentState: null

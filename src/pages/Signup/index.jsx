@@ -4,7 +4,7 @@ import BaseForm from '../../components/Forms/BaseForm';
 import Button from '../../components/Forms/Button';
 import { withRouter, Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { userActions } from '../../actions';
+import { registerRequest } from '../../actions/user';
 import InputText from '../../components/Forms/InputText';
 
 function Signup(props){
@@ -60,7 +60,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         registerRequest: (username, password, setSubmitting, setErrors, goToLoginPage) => {
-            dispatch(userActions.registerRequest(username, password, setSubmitting, setErrors, goToLoginPage));
+            dispatch(registerRequest(username, password, setSubmitting, setErrors, goToLoginPage));
         }
     };
 }

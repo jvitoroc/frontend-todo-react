@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { userActions } from '../../actions';
+import { userActions, logout } from '../../actions/user';
 import styles from './style.module.css'
 
 function Topbar(props){
@@ -36,7 +36,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         logout: () => {
-            dispatch(userActions.logout())
+            dispatch(logout())
         }
     }
 }

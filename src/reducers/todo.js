@@ -1,6 +1,9 @@
 import {
-    todoActions
-} from '../actions'
+	SELECT_TODO,
+	TOGGLE_EDIT_MODE,
+	FETCH_TODOS,
+	RECEIVE_TODOS
+} from '../actions/todo'
 
 function todo(state = {
 	allowDeletion: false,
@@ -11,7 +14,7 @@ function todo(state = {
     data: []
 }, action) {
     switch (action.type) {
-		case todoActions.SELECT_TODO:
+		case SELECT_TODO:
 			let newTodos = state.data.map((todo) => {
 				if (todo.todoId === action.todoId) {
 					return Object.assign({}, todo, {
@@ -27,7 +30,7 @@ function todo(state = {
 				}, false),
 				data: newTodos
 			}
-		case todoActions.TOGGLE_EDIT_MODE:
+		case TOGGLE_EDIT_MODE:
 			return {
 				...state,
 				data: state.data.map((todo) => {
@@ -39,14 +42,14 @@ function todo(state = {
 					return todo
 				})
 			}
-		case todoActions.FETCH_TODOS:
+		case FETCH_TODOS:
 			return {
 				...state,
 				isFetching: true,
 				allowDeletion: false,
 				fetched: action.parentTodoId === state.parentTodoId
 			}
-		case todoActions.RECEIVE_TODOS:
+		case RECEIVE_TODOS:
 			return {
 				...state,
 				allowDeletion: false,

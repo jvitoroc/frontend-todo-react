@@ -1,7 +1,8 @@
 import React, {  useEffect } from 'react';
 import { connect } from 'react-redux'
 import Todo from '../../components/Todo';
-import { todoActions } from '../../actions';
+import { createTodo, deleteTodo, updateTodo, selectTodo, toggleEditMode, deleteSelectedTodos, fetchTodos } from '../../actions/todo';
+import { showNotificationRequest } from '../../actions/notification';
 import styles from './style.module.css';
 import {MdAdd, MdDelete, MdArrowUpward} from 'react-icons/md'
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
@@ -18,6 +19,11 @@ function TodoList(props){
     useEffect(()=>{
         props.fetchTodos(props.match.params.parentTodoId);
     }, [props.match.params.parentTodoId]);
+
+    useEffect(()=>{
+        if(inputNewTodoError)
+            props.showNotificationRequest('You should give a description to your todo.', null, 'error');
+    }, [inputNewTodoError])
 
     useEffect(()=>{
         if(inputNewTodoRef){
@@ -147,7 +153,7 @@ function TodoList(props){
                         <MdDelete size={24}/>
                     </div>
                     <div className={inputNewTodoClasses}>
-                        <input ref={inputNewTodoRef} onKeyUp={onInputNewTodoKeyUp} type="text" placeholder="Name a new todo..."/>
+                        <input ref={inputNewTodoRef} onKeyUp={onInputNewTodoKeyUp} type="text" placeholder="Describe a new todo..."/>
                     </div>
                     <div onClick={showInputNewTodo} className={classnames(styles['action-button'], styles['add-action-button'])} title={'Add todo.'}> 
                         <MdAdd size={24}/>
@@ -166,28 +172,31 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         createTodo: (parentTodoId, description) => {
-            dispatch(todoActions.createTodo(parentTodoId, description));
+            dispatch(createTodo(parentTodoId, description));
         },
         deleteTodo: todoId => {
-            dispatch(todoActions.deleteTodo(todoId));
+            dispatch(deleteTodo(todoId));
         },
         completeTodo: (todoId, completed) => {
-            dispatch(todoActions.updateTodo(todoId, {completed}));
+            dispatch(updateTodo(todoId, {completed}));
         },
         editTodoDescription: (todoId, description) => {
-            dispatch(todoActions.updateTodo(todoId, {description}));
+            dispatch(updateTodo(todoId, {description}));
         },
         selectTodo: todoId => {
-            dispatch(todoActions.selectTodo(todoId))
+            dispatch(selectTodo(todoId))
         },
         toggleEditMode: todoId => {
-            dispatch(todoActions.toggleEditMode(todoId))
+            dispatch(toggleEditMode(todoId))
         },
         deleteSelectedTodos: () => {
-            dispatch(todoActions.deleteSelectedTodos())
+            dispatch(deleteSelectedTodos())
         }, 
         fetchTodos: (parentTodoId) => {
-            dispatch(todoActions.fetchTodos(parentTodoId))
+            dispatch(fetchTodos(parentTodoId))
+        }, 
+        showNotificationRequest: (caption, body, type) => {
+            dispatch(showNotificationRequest(caption, body, type))
         }
     }
 }
