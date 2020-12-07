@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactLoading from 'react-loading';
-import {Redirect, withRouter} from 'react-router-dom'
+import {Redirect, useLocation, withRouter} from 'react-router-dom'
 import {Route, Switch} from 'react-router-dom';
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {connect} from 'react-redux'
@@ -9,6 +9,7 @@ import { AUTHENTICATE_REQUEST, authenticateRequest, authenticateFailure } from '
 import Topbar from '../Topbar';
 import Signup from '../../pages/Signup';
 import TodoList from '../../pages/TodoList';
+import Verification from '../../pages/Verification';
 import Login from '../../pages/Login';
 import {NotificationCenter} from '../Notification';
 
@@ -42,7 +43,7 @@ function AppRoute(props){
 }
 
 function ProtectedRoute(props){
-    if(props.check())
+    if(props.check && props.check())
         return (
             <AppRoute {...props}>
                 {props.children}
@@ -52,6 +53,8 @@ function ProtectedRoute(props){
 }
 
 function App(props){
+    let location = useLocation();
+
     useEffect(()=>{
         let token = localStorage.getItem('token');
         if(token !== null){
@@ -63,6 +66,10 @@ function App(props){
 
     if(props.currentState === AUTHENTICATE_REQUEST){
         return <LoadingIndicator/>
+    }
+
+    if(!props.verified && props.authenticated && location.pathname !== '/user/verification'){
+        return <Redirect to={'/user/verification'}/>;
     }
 
     return (
@@ -105,6 +112,14 @@ function App(props){
                             >
                                 {TodoList}
                             </ProtectedRoute>
+                            <ProtectedRoute
+                                path="/user/verification"
+                                check={()=>{return props.authenticated && !props.verified}}
+                                redirectTo={'/login'}
+                                exact
+                            >
+                                {Verification}
+                            </ProtectedRoute>
                             {/* <Redirect to="/404"/> */}
                         </Switch>
                     </CSSTransition>
@@ -115,7 +130,7 @@ function App(props){
 }
 
 const mapStateToProps = ({user}) => {
-    return {currentState: user.currentState, authenticated: user.authenticated};
+    return {currentState: user.currentState, authenticated: user.authenticated, verified: user.verified};
 }
 
 const mapDispatchToProps = dispatch => {

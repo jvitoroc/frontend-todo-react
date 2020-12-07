@@ -22,7 +22,7 @@ function TodoList(props){
 
     useEffect(()=>{
         if(inputNewTodoError)
-            props.showNotificationRequest('You should give a description to your todo.', null, 'error');
+            props.showNotificationRequest('You must give a description to your todo.', null, 'error');
     }, [inputNewTodoError])
 
     useEffect(()=>{

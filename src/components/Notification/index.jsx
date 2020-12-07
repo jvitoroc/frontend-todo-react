@@ -1,11 +1,12 @@
 import React from 'react';
-import {MdError, MdInfo} from 'react-icons/md';
+import {MdError, MdInfo, MdClose} from 'react-icons/md';
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
+import { dismissNotification, showNotificationRequest } from '../../actions/notification';
 import classnames from 'classnames';
 import {connect} from 'react-redux';
 import styles from './style.module.css';
 
-function Notification({caption, body, type}){
+function Notification({caption, body, type, onDismiss}){
     let icon = null;
     let iconProps = {color: 'white', size: 24}
 
@@ -20,24 +21,25 @@ function Notification({caption, body, type}){
 
     return (
         <div className={classnames(styles.Notification, styles[type])}>
-            <div className={styles['icon-wrapper']}>{icon}</div>
+            <div className={classnames(styles['icon-type-wrapper'], styles['icon-wrapper'])}>{icon}</div>
             <div className={styles.message}>
                 <div className={styles.caption}>{caption}</div>
                 {body ? (<div className={styles.body}>{body}</div>):null}
             </div>
+            <div onClick={onDismiss} className={classnames(styles['icon-dismiss-wrapper'], styles['icon-wrapper'])}><MdClose {...iconProps}/></div>
         </div>
     )
 }
 
-function NotificationCenter(props){
-    let notifications = props.notifications.slice(-2).map((e)=>{
+function NotificationCenter({notifications, dismissNotification}){
+    let notificationsToBeRendered = notifications.slice(-2).map((e)=>{
         return (
             <CSSTransition
                     key={e.id}
                     timeout={1000}
                     classNames={"item"}
             >
-                <Notification {...e}/>
+                <Notification onDismiss={()=>{dismissNotification(e.id)}} {...e}/>
             </CSSTransition>
         );
     });
@@ -45,7 +47,7 @@ function NotificationCenter(props){
     return (
         <div className={styles.NotificationCenter}>
             <TransitionGroup appear>    
-                {notifications}
+                {notificationsToBeRendered}
             </TransitionGroup>
         </div>
     )
@@ -57,7 +59,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-       
+        dismissNotification: (id)=>{
+            dispatch(dismissNotification(id))  
+        },
+        showNotificationRequest: (caption, body, type, duration)=>{
+            dispatch(showNotificationRequest(caption, body, type, duration))  
+        }
     }
 }
 

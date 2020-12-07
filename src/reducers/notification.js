@@ -1,6 +1,6 @@
 import {
 	SHOW_NOTIFICATION,
-	HIDE_NOTIFICATION
+	DISMISS_NOTIFICATION
 } from '../actions/notification';
 
 function notification(state = {notifications: []}, action) {
@@ -14,7 +14,7 @@ function notification(state = {notifications: []}, action) {
 					type: action.notifType
 				}]
 			}
-		case HIDE_NOTIFICATION:
+		case DISMISS_NOTIFICATION:
 			return {
 				notifications: state.notifications.filter((e)=>{
 					return e.id !== action.id;

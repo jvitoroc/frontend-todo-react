@@ -1,0 +1,70 @@
+.Verification{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 300;
+    font-size: 0.875rem;
+    color: rgb(128, 128, 128);
+}
+
+.box-wrapper{
+    width: 260px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgb(226, 226, 226);
+    background-color: white;
+    z-index: 1;
+    position: relative;
+}
+
+.title{
+    font-size: 1.3em;
+    font-weight: 500;
+}
+
+.subtitle{
+    margin-top: 3px;
+    font-size: 1em;
+    font-weight: 400;
+}
+
+.body{
+    margin-top: 20px;
+}
+
+.resend{
+    color: rgb(128, 128, 128);
+    text-align: center;
+    display: block;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 15px 5px 0 5px;
+}
+
+.resend:hover{
+    color: rgb(100, 100, 100);
+}
+
+.input{
+    display: flex;
+    justify-content: space-between;
+}
+
+.input > input{
+    width: calc(70% / 6);
+    height: 25px;
+    outline: none;
+    border: 2px solid rgb(192, 192, 192);
+    border-radius: 4px;
+    text-align: center;
+    font-size: 1.2em;
+    font-family: Roboto;
+    font-weight: 500;
+    color: rgb(128, 128, 128);
+    text-transform: capitalize;
+}
+
+.input > input:focus{
+    border: 2px solid rgb(128, 128, 128);
+}

@@ -1,6 +1,7 @@
 import { put, takeEvery, call, select, takeLatest } from 'redux-saga/effects';
 import {CREATE_TODO, UPDATE_TODO, DELETE_SELECTED_TODOS, DELETE_TODO, FETCH_TODOS, RECEIVE_TODOS} from '../actions/todo';
 import {showNotificationRequest} from '../actions/notification';
+import {handleFetchRequest, tryHandleVerificationError} from './common';
 
 function createTodo(parentTodoId, todo) {
     return new Promise((resolve, reject)=>{
@@ -13,22 +14,7 @@ function createTodo(parentTodoId, todo) {
             }
         }
 
-        return fetch(parentTodoId ? `http://localhost:8000/todo/${parentTodoId}` : 'http://localhost:8000/todo/', init)
-        .then(
-            response => {
-                return Promise.all([response.json(), Promise.resolve(response.ok)]);
-            }
-        )
-        .then(
-            response => {
-                let [json, ok] = [...response];
-                if(ok)
-                    resolve(json);
-            else
-                    reject(json);
-            }
-        )
-        .catch(error => { reject(error); });
+        handleFetchRequest(fetch(parentTodoId ? `http://localhost:8000/todo/${parentTodoId}` : 'http://localhost:8000/todo/', init), resolve, reject);
     });
 }
 
@@ -43,22 +29,7 @@ function updateTodo(todoId, todo) {
             }
         }
 
-        return fetch(`http://localhost:8000/todo/${todoId}`, init)
-        .then(
-            response => {
-                return Promise.all([response.json(), Promise.resolve(response.ok)]);
-            }
-        )
-        .then(
-            response => {
-                let [json, ok] = [...response];
-                if(ok)
-                    resolve(json);
-            else
-                    reject(json);
-            }
-        )
-        .catch(error => { reject(error); });
+        handleFetchRequest(fetch(`http://localhost:8000/todo/${todoId}`, init), resolve, reject);
     });
 }
 
@@ -72,22 +43,7 @@ function deleteTodo(todoId) {
             }
         }
 
-        return fetch(`http://localhost:8000/todo/${todoId}`, init)
-        .then(
-            response => {
-                return Promise.all([response.json(), Promise.resolve(response.ok)]);
-            }
-        )
-        .then(
-            response => {
-                let [json, ok] = [...response];
-                if(ok)
-                    resolve(json);
-            else
-                    reject(json);
-            }
-        )
-        .catch(error => { reject(error); });
+        handleFetchRequest(fetch(`http://localhost:8000/todo/${todoId}`, init), resolve, reject);
     });
 }
 
@@ -102,22 +58,7 @@ function deleteSelectedTodos(ids) {
             }
         }
 
-        return fetch('http://localhost:8000/todo/', init)
-        .then(
-            response => {
-                return Promise.all([response.json(), Promise.resolve(response.ok)]);
-            }
-        )
-        .then(
-            response => {
-                let [json, ok] = [...response];
-                if(ok)
-                    resolve(json);
-            else
-                    reject(json);
-            }
-        )
-        .catch(error => { reject(error); });
+        handleFetchRequest(fetch('http://localhost:8000/todo/', init), resolve, reject);
     });
 }
 
@@ -128,22 +69,7 @@ function fetchTodos(parentTodoId) {
             headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
         }
     
-        return fetch(parentTodoId ? `http://localhost:8000/todo/${parentTodoId}` : 'http://localhost:8000/todo/', init)
-        .then(
-            response => {
-                return Promise.all([response.json(), Promise.resolve(response.ok)]);
-            }
-        )
-        .then(
-            response => {
-                let [json, ok] = [...response];
-                if(ok)
-                    resolve(json);
-               else
-                    reject(json);
-            }
-        )
-        .catch(error => { reject(error); });
+        handleFetchRequest(fetch(parentTodoId ? `http://localhost:8000/todo/${parentTodoId}` : 'http://localhost:8000/todo/', init), resolve, reject);
     });
 }
 
@@ -171,29 +97,40 @@ function receiveTodos(parentTodoId, json) {
 
 function* createTodoRequest({parentTodoId, todo}){
     try{
-        yield call(createTodo, parentTodoId, todo);
+        let [json, status, ok] = [...yield call(createTodo, parentTodoId, todo)];
+        if(!ok) throw json;
         yield invalidate();
     }catch(error){
-        yield put(showNotificationRequest('An error ocurred while trying to create an todo:', error.message, 'error'));
+        let handled = yield tryHandleVerificationError(error);
+        if(!handled){
+            yield put(showNotificationRequest('An error ocurred while trying to create an todo:', error.message, 'error'));
+        }
     }
 }
 
 function* updateTodoRequest({todoId, todo}) {
     try{
-        yield call(updateTodo, todoId, todo);
+        let [json, status, ok] = [...yield call(updateTodo, todoId, todo)];
+        if(!ok) throw json;
         yield invalidate();
-        // yield put(showNotificationRequest('Todo successfully updated.', null, 'success'));
     }catch(error){
-        yield put(showNotificationRequest('An error ocurred while trying to update an todo:', error.message, 'error'));
+        let handled = yield tryHandleVerificationError(error);
+        if(!handled){
+            yield put(showNotificationRequest('An error ocurred while trying to update an todo:', error.message, 'error'));
+        }
     }
 }
 
 function* deleteTodoRequest({todoId}) {
     try{
-        yield call(deleteTodo, todoId);
+        let [json, status, ok] = [...yield call(deleteTodo, todoId)];
+        if(!ok) throw json;
         yield invalidate();
     }catch(error){
-        yield put(showNotificationRequest('An error ocurred while trying to delete an todo:', error.message, 'error'));
+        let handled = yield tryHandleVerificationError(error);
+        if(!handled){
+            yield put(showNotificationRequest('An error ocurred while trying to delete an todo:', error.message, 'error'));
+        }
     }
 }
 
@@ -207,19 +144,27 @@ function* deleteSelectedTodosRequest() {
 				return acc
         }, []);
         
-        yield call(deleteSelectedTodos, ids);
+        let [json, status, ok] = [...yield call(deleteSelectedTodos, ids)];
+        if(!ok) throw json;
         yield invalidate();
     }catch(error){
-        yield put(showNotificationRequest('An error ocurred while trying to delete multiple todos:', error.message, 'error'));
+        let handled = yield tryHandleVerificationError(error);
+        if(!handled){
+            yield put(showNotificationRequest('An error ocurred while trying to delete multiple todos:', error.message, 'error'));
+        }
     }
 }
 
 function* fetchTodosRequest({parentTodoId}) {
     try{
-        let json = yield call(fetchTodos, parentTodoId);
+        let [json, status, ok] = [...yield call(fetchTodos, parentTodoId)];
+        if(!ok) throw json;
         yield put({type: RECEIVE_TODOS, ...receiveTodos(parentTodoId, json)});
     }catch(error){
-        yield put(showNotificationRequest('An error ocurred while trying to fetch some todos:', error.message, 'error'));
+        let handled = yield tryHandleVerificationError(error);
+        if(!handled){
+            yield put(showNotificationRequest('An error ocurred while trying to fetch some todos:', error.message, 'error'));
+        }
     }
 }
 

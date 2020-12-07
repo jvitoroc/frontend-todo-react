@@ -1,19 +1,19 @@
-import { put, takeEvery, call, take, delay, race } from 'redux-saga/effects';
-import { HIDE_NOTIFICATION, SHOW_NOTIFICATION_REQUEST, showNotification, hideNotification } from '../actions/notification';
+import { put, takeEvery, take, delay, race } from 'redux-saga/effects';
+import { DISMISS_NOTIFICATION, SHOW_NOTIFICATION_REQUEST, dismissNotification, showNotification } from '../actions/notification';
 
 let notificationCount = 0;
 
-function* showNotificationRequest(action){
+function* showNotificationRequest({caption, body, notifType, duration}){
     let id = ++notificationCount;
-    yield put(showNotification(id, action.caption, action.body, action.notifType));
+    yield put(showNotification(id, caption, body, notifType));
     
     const { shouldBeRemoved } = yield race({
-        shouldBeRemoved: delay(action.duration || 5000),
-        _: take(_action => _action.type === HIDE_NOTIFICATION && _action.id === id)
+        shouldBeRemoved: delay(duration || 5000),
+        _: take(_action => _action.type === DISMISS_NOTIFICATION && _action.id === id)
     })
 
     if (shouldBeRemoved) {
-        yield put(hideNotification(id));
+        yield put(dismissNotification(id));
     }
 }
 

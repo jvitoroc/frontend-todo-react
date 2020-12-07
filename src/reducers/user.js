@@ -9,11 +9,22 @@ import {
 	AUTHENTICATE_REQUEST,
 	AUTHENTICATE_SUCCESS,
 	AUTHENTICATE_FAILURE,
-	CLEAR_STATE
+	CLEAR_STATE,
+	SET_VERIFICATION_STATE,
+	VERIFY_SUCCESS,
+	VERIFY_REQUEST,
+	VERIFY_FAILURE
 } from '../actions/user'
 
-function user(state = {authenticated: false}, action) {
+function user(state = {authenticated: false, verified: true}, action) {
     switch (action.type) {
+		case SET_VERIFICATION_STATE:
+			return {
+				...state,
+				verified: action.verified,
+				user: action.user,
+				currentState: null
+			}
 		case LOGIN_REQUEST:
 			return {
 				...state,
@@ -67,6 +78,7 @@ function user(state = {authenticated: false}, action) {
 				...state,
 				user: action.user,
 				authenticated: true,
+				verified: action.verified,
 				token: action.token,
 				currentState: 'AUTHENTICATE_SUCCESS'
 			}
@@ -77,6 +89,23 @@ function user(state = {authenticated: false}, action) {
 				authenticated: false,
 				token: null,
 				currentState: 'AUTHENTICATE_FAILURE'
+			}
+		case VERIFY_REQUEST:
+			return {
+				...state,
+				currentState: 'VERIFY_REQUEST'
+			}
+		case VERIFY_SUCCESS:
+			return {
+				...state,
+				verified: true,
+				currentState: 'VERIFY_SUCCESS'
+			}
+		case VERIFY_FAILURE:
+			return {
+				...state,
+				verifyError: action.error,
+				currentState: 'VERIFY_FAILURE'
 			}
 		case CLEAR_STATE:
 			return {

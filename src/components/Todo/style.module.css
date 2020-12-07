@@ -34,7 +34,7 @@
     align-items: center;
     width: calc(100% - 30px);
     margin-left: 20px;
-    padding: 2px 0;
+    padding: 2px 5px 2px 0;
 }
 
 .text > div{

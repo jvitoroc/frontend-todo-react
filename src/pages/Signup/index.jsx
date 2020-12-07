@@ -10,7 +10,7 @@ import InputText from '../../components/Forms/InputText';
 function Signup(props){
     let history = useHistory();
     const handleSubmit = (values, { setSubmitting, setErrors })=>{
-        props.registerRequest(values.username, values.password, setSubmitting, setErrors, ()=>{
+        props.registerRequest(values.username, values.email, values.password, setSubmitting, setErrors, ()=>{
             history.push('/login');
         });
     };
@@ -23,17 +23,25 @@ function Signup(props){
         if (!values.password)
             errors.password = 'Password is required.';
 
-        if (!values.password)
+        if (!values.email)
+            errors.email = 'Email is required.';
+
+        if (!values.repeatPassword)
             errors.repeatPassword = 'Confirm your password.';
         else if (values.password !== values.repeatPassword)
             errors.repeatPassword = "Passwords don't match.";
+
+        if (!values.repeatEmail)
+            errors.repeatEmail = 'Confirm your email.';
+        else if (values.email !== values.repeatEmail)
+            errors.repeatEmail = "Emails don't match.";
 
         return errors;
     }
 
     return (
         <BaseForm
-            initialValues={{ username: '', password: '', repeatPassword: '' }}
+            initialValues={{ username: '', email: '', repeatEmail: '', password: '', repeatPassword: '' }}
             validate={validateForm}
             onSubmit={handleSubmit}
             state={props.user.currentState}
@@ -43,6 +51,8 @@ function Signup(props){
                 return (
                     <>
                         <InputText name={'username'} label={'Username'} value={values.username} error={errors.username}/>
+                        <InputText name={'email'} label={'Email'} value={values.email} error={errors.email}/>
+                        <InputText name={'repeatEmail'} label={'Repeat email'} value={values.repeatEmail} error={errors.repeatEmail}/>
                         <InputText name={'password'} label={'Password'}  value={values.password} error={errors.password} password/>
                         <InputText name={'repeatPassword'} label={'Repeat password'}  value={values.repeatPassword} error={errors.repeatPassword} password/>
                         <Button disabled={isSubmitting} type="submit" value="Sign up"/>
@@ -59,8 +69,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        registerRequest: (username, password, setSubmitting, setErrors, goToLoginPage) => {
-            dispatch(registerRequest(username, password, setSubmitting, setErrors, goToLoginPage));
+        registerRequest: (username, email, password, setSubmitting, setErrors, goToLoginPage) => {
+            dispatch(registerRequest(username, email, password, setSubmitting, setErrors, goToLoginPage));
         }
     };
 }
