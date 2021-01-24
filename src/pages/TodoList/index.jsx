@@ -49,9 +49,9 @@ function TodoList(props){
     }
 
     const onKeyUp = (e)=>{
-        if(e.code === 'Escape'){
+        if(e.keyCode === 27){
             setInputNewTodoActive(false);
-        }else if(e.code === 'Enter'){
+        }else if(e.keyCode === 13){
             setInputNewTodoActive(true);
         }
     } 

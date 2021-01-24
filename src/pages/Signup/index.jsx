@@ -9,6 +9,7 @@ import InputText from '../../components/Forms/InputText';
 
 function Signup(props){
     let history = useHistory();
+    
     const handleSubmit = (values, { setSubmitting, setErrors })=>{
         props.registerRequest(values.username, values.email, values.password, setSubmitting, setErrors, ()=>{
             history.push('/login');

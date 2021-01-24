@@ -19,6 +19,9 @@ export const VERIFY_REQUEST = 'VERIFY_REQUEST';
 export const VERIFY_SUCCESS = 'VERIFY_SUCCESS';
 export const VERIFY_FAILURE = 'VERIFY_FAILURE';
 
+export const RESEND_VERIFICATION_CODE_REQUEST = 'RESEND_VERIFICATION_CODE_REQUEST';
+export const RESEND_VERIFICATION_CODE_RESPONSE = 'RESEND_VERIFICATION_CODE_RESPONSE';
+
 export function loginRequest(username, password, setSubmitting, setErrors){
 	return { type: LOGIN_REQUEST, username, password, setSubmitting, setErrors };
 }
@@ -43,10 +46,18 @@ export function verifyRequest(verificationCode){
 	return { type: VERIFY_REQUEST, verificationCode };
 }
 
-export function verifySucess(){
+export function verifySuccess(){
 	return { type: VERIFY_SUCCESS };
 }
 
 export function verifyFailure(error){
 	return { type: VERIFY_FAILURE, error };
+}
+
+export function resendVerificationCodeRequest(){
+	return { type: RESEND_VERIFICATION_CODE_REQUEST };
+}
+
+export function resendVerificationCodeResponse(message){
+	return { type: RESEND_VERIFICATION_CODE_RESPONSE, message };
 }

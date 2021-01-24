@@ -13,7 +13,9 @@ import {
 	SET_VERIFICATION_STATE,
 	VERIFY_SUCCESS,
 	VERIFY_REQUEST,
-	VERIFY_FAILURE
+	VERIFY_FAILURE,
+	RESEND_VERIFICATION_CODE_REQUEST,
+	RESEND_VERIFICATION_CODE_RESPONSE
 } from '../actions/user'
 
 function user(state = {authenticated: false, verified: true}, action) {
@@ -106,6 +108,16 @@ function user(state = {authenticated: false, verified: true}, action) {
 				...state,
 				verifyError: action.error,
 				currentState: 'VERIFY_FAILURE'
+			}
+		case RESEND_VERIFICATION_CODE_REQUEST:
+			return {
+				...state,
+				currentState: 'RESEND_VERIFICATION_CODE_REQUEST'
+			}
+		case RESEND_VERIFICATION_CODE_RESPONSE:
+			return {
+				...state,
+				currentState: 'RESEND_VERIFICATION_CODE_RESPONSE'
 			}
 		case CLEAR_STATE:
 			return {

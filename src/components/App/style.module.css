@@ -5,21 +5,18 @@ input:-webkit-autofill:active  {
     -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
 
-:global(#root){
-    height: 100%;
-}
-
-body{
-    background-color: rgb(238, 238, 238);
-    margin: 0;
-}
-
+:global(#root),
 .App,
 .page,
 .pages-wrapper,
 .pages-wrapper > div,
 body{
     height: 100%;
+}
+
+body{
+    background-color: rgb(238, 238, 238);
+    margin: 0;
 }
 
 .App{
