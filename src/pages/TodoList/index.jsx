@@ -34,11 +34,6 @@ function TodoList(props){
         }
     }, [inputNewTodoActive]);
 
-    useEffect(()=>{
-        document.addEventListener('keyup', onKeyUp);
-        return ()=>{document.removeEventListener('keyup', onKeyUp)};
-    }, []);
-
     const showInputNewTodo = () => {
         setInputNewTodoError(false);
         if(!inputNewTodoActive){
@@ -47,14 +42,6 @@ function TodoList(props){
             createTodo();
         }
     }
-
-    const onKeyUp = (e)=>{
-        if(e.keyCode === 27){
-            setInputNewTodoActive(false);
-        }else if(e.keyCode === 13){
-            setInputNewTodoActive(true);
-        }
-    } 
 
     const onInputNewTodoKeyUp = (e) => {
         if(e.keyCode === 13){
@@ -86,7 +73,7 @@ function TodoList(props){
         }
     }
 
-    const getWelcomeText = ()=>{
+    const getWelcomeText = () => {
         let hours = (new Date()).getHours();
         if(hours >= 0 && hours <= 11)
             return 'Good morning, here are your todos';
