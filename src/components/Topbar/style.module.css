@@ -1,9 +1,12 @@
 .Topbar{
+    max-width: 680px;
     height: 40px;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     padding: 5px;
-    position: fixed;
+    /* position: absolute; */
+    margin: 0 auto;
 }
 
 .bold{

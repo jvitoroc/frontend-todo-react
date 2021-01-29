@@ -1,7 +1,7 @@
 import { put, takeEvery, call, select, takeLatest } from 'redux-saga/effects';
 import {CREATE_TODO, UPDATE_TODO, DELETE_SELECTED_TODOS, DELETE_TODO, FETCH_TODOS, RECEIVE_TODOS} from '../actions/todo';
 import {showNotificationRequest} from '../actions/notification';
-import {handleFetchRequest, tryHandleVerificationError} from './common';
+import {handleFetchRequest, tryHandleVerificationError, API_URL} from './common';
 
 function createTodo(parentTodoId, todo) {
     return new Promise((resolve, reject)=>{
@@ -14,7 +14,7 @@ function createTodo(parentTodoId, todo) {
             }
         }
 
-        handleFetchRequest(fetch(parentTodoId ? `http://localhost:8000/todo/${parentTodoId}` : 'http://localhost:8000/todo/', init), resolve, reject);
+        handleFetchRequest(fetch(parentTodoId ? `${API_URL}/todo/${parentTodoId}` : `${API_URL}/todo/`, init), resolve, reject);
     });
 }
 
@@ -29,7 +29,7 @@ function updateTodo(todoId, todo) {
             }
         }
 
-        handleFetchRequest(fetch(`http://localhost:8000/todo/${todoId}`, init), resolve, reject);
+        handleFetchRequest(fetch(`${API_URL}/todo/${todoId}`, init), resolve, reject);
     });
 }
 
@@ -43,7 +43,7 @@ function deleteTodo(todoId) {
             }
         }
 
-        handleFetchRequest(fetch(`http://localhost:8000/todo/${todoId}`, init), resolve, reject);
+        handleFetchRequest(fetch(`${API_URL}/todo/${todoId}`, init), resolve, reject);
     });
 }
 
@@ -58,7 +58,7 @@ function deleteSelectedTodos(ids) {
             }
         }
 
-        handleFetchRequest(fetch('http://localhost:8000/todo/', init), resolve, reject);
+        handleFetchRequest(fetch(`${API_URL}/todo/`, init), resolve, reject);
     });
 }
 
@@ -69,7 +69,7 @@ function fetchTodos(parentTodoId) {
             headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
         }
     
-        handleFetchRequest(fetch(parentTodoId ? `http://localhost:8000/todo/${parentTodoId}` : 'http://localhost:8000/todo/', init), resolve, reject);
+        handleFetchRequest(fetch(parentTodoId ? `${API_URL}/todo/${parentTodoId}` : `${API_URL}/todo/`, init), resolve, reject);
     });
 }
 
@@ -95,7 +95,7 @@ function receiveTodos(parentTodoId, json) {
 	}
 }
 
-function* createTodoRequest({parentTodoId, todo}){
+function* onCreateTodo({parentTodoId, todo}){
     try{
         let [json, status, ok] = [...yield call(createTodo, parentTodoId, todo)];
         if(!ok) throw json;
@@ -103,12 +103,12 @@ function* createTodoRequest({parentTodoId, todo}){
     }catch(error){
         let handled = yield tryHandleVerificationError(error);
         if(!handled){
-            yield put(showNotificationRequest('An error ocurred while trying to create an todo:', error.message, 'error'));
+            yield put(showNotificationRequest('An error ocurred while trying to create an todo:', error.detail, 'error'));
         }
     }
 }
 
-function* updateTodoRequest({todoId, todo}) {
+function* onUpdateTodo({todoId, todo}) {
     try{
         let [json, status, ok] = [...yield call(updateTodo, todoId, todo)];
         if(!ok) throw json;
@@ -116,12 +116,12 @@ function* updateTodoRequest({todoId, todo}) {
     }catch(error){
         let handled = yield tryHandleVerificationError(error);
         if(!handled){
-            yield put(showNotificationRequest('An error ocurred while trying to update an todo:', error.message, 'error'));
+            yield put(showNotificationRequest('An error ocurred while trying to update an todo:', error.detail, 'error'));
         }
     }
 }
 
-function* deleteTodoRequest({todoId}) {
+function* onDeleteTodo({todoId}) {
     try{
         let [json, status, ok] = [...yield call(deleteTodo, todoId)];
         if(!ok) throw json;
@@ -129,12 +129,12 @@ function* deleteTodoRequest({todoId}) {
     }catch(error){
         let handled = yield tryHandleVerificationError(error);
         if(!handled){
-            yield put(showNotificationRequest('An error ocurred while trying to delete an todo:', error.message, 'error'));
+            yield put(showNotificationRequest('An error ocurred while trying to delete an todo:', error.detail, 'error'));
         }
     }
 }
 
-function* deleteSelectedTodosRequest() {
+function* onDeleteSelectedTodos() {
     try{
         let state = yield select();
 		let ids = state.todo.data.reduce((acc, todo)=>{
@@ -150,12 +150,12 @@ function* deleteSelectedTodosRequest() {
     }catch(error){
         let handled = yield tryHandleVerificationError(error);
         if(!handled){
-            yield put(showNotificationRequest('An error ocurred while trying to delete multiple todos:', error.message, 'error'));
+            yield put(showNotificationRequest('An error ocurred while trying to delete multiple todos:', error.detail, 'error'));
         }
     }
 }
 
-function* fetchTodosRequest({parentTodoId}) {
+function* onFetchTodos({parentTodoId}) {
     try{
         let [json, status, ok] = [...yield call(fetchTodos, parentTodoId)];
         if(!ok) throw json;
@@ -163,15 +163,15 @@ function* fetchTodosRequest({parentTodoId}) {
     }catch(error){
         let handled = yield tryHandleVerificationError(error);
         if(!handled){
-            yield put(showNotificationRequest('An error ocurred while trying to fetch some todos:', error.message, 'error'));
+            yield put(showNotificationRequest('An error ocurred while trying to fetch some todos:', error.detail, 'error'));
         }
     }
 }
 
 export default function* todoSaga() {
-    yield takeEvery(CREATE_TODO, createTodoRequest);
-    yield takeEvery(UPDATE_TODO, updateTodoRequest);
-    yield takeEvery(DELETE_TODO, deleteTodoRequest);
-    yield takeEvery(DELETE_SELECTED_TODOS, deleteSelectedTodosRequest);
-    yield takeLatest(FETCH_TODOS, fetchTodosRequest);
+    yield takeEvery(CREATE_TODO, onCreateTodo);
+    yield takeEvery(UPDATE_TODO, onUpdateTodo);
+    yield takeEvery(DELETE_TODO, onDeleteTodo);
+    yield takeEvery(DELETE_SELECTED_TODOS, onDeleteSelectedTodos);
+    yield takeLatest(FETCH_TODOS, onFetchTodos);
 }

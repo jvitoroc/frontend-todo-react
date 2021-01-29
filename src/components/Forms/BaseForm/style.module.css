@@ -3,6 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     font-weight: 300;
     font-size: 0.875rem;
 }
@@ -14,6 +15,7 @@
     box-shadow: 0px 0px 10px rgb(226 226 226);
     background-color: white;
     z-index: 1;
+    overflow: hidden;
     position: relative;
 }
 
@@ -22,4 +24,15 @@
     background-size: cover;
     background-position: center;
     height: 200px;
+}
+
+.alternative{
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.alternative > button{
+    display: block;
 }

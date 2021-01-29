@@ -126,28 +126,30 @@ function TodoList(props){
 
     return (
         <div className={styles.TodoList}>
-            <div className={styles['todo-list-title']}>
-                <div title={title}>
-                    {title}
-                </div>
-            </div>
-            <div className={styles.menu}>
-                <div className={styles.actions}>
-                    <div onClick={goBack} className={goBackClasses} title={'Go back.'}> 
-                        <MdArrowUpward size={24}/>
-                    </div> 
-                    <div onClick={props.deleteSelectedTodos} className={deleteButtonClasses} title={'Delete selected todos.'}> 
-                        <MdDelete size={24}/>
-                    </div>
-                    <div className={inputNewTodoClasses}>
-                        <input ref={inputNewTodoRef} onKeyUp={onInputNewTodoKeyUp} type="text" placeholder="Describe a new todo..."/>
-                    </div>
-                    <div onClick={showInputNewTodo} className={classnames(styles['action-button'], styles['add-action-button'])} title={'Add todo.'}> 
-                        <MdAdd size={24}/>
+            <div className={styles.content}>
+                <div className={styles['todo-list-title']}>
+                    <div title={title}>
+                        {title}
                     </div>
                 </div>
+                <div className={styles.menu}>
+                    <div className={styles.actions}>
+                        <div onClick={goBack} className={goBackClasses} title={'Go back.'}> 
+                            <MdArrowUpward size={24}/>
+                        </div> 
+                        <div onClick={props.deleteSelectedTodos} className={deleteButtonClasses} title={'Delete selected todos.'}> 
+                            <MdDelete size={24}/>
+                        </div>
+                        <div className={inputNewTodoClasses}>
+                            <input ref={inputNewTodoRef} onKeyUp={onInputNewTodoKeyUp} type="text" placeholder="Describe a new todo..."/>
+                        </div>
+                        <div onClick={showInputNewTodo} className={classnames(styles['action-button'], styles['add-action-button'])} title={'Add todo.'}> 
+                            <MdAdd size={24}/>
+                        </div>
+                    </div>
+                </div>
+                {toBeRendered}
             </div>
-            {toBeRendered}
         </div>
     );
 }

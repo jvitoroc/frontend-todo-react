@@ -1,6 +1,8 @@
 import { put } from "redux-saga/effects";
 import { SET_VERIFICATION_STATE } from "../actions/user";
 
+export const API_URL = process.env.REACT_APP_API_URL;
+
 export function* tryHandleVerificationError(error){
     if(error.userVerified === false){
         yield put({type: SET_VERIFICATION_STATE, verified: false, user: error.data});

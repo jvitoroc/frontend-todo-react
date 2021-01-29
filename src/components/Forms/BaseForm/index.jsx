@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './style.module.css';
 import { Formik, Form } from 'formik';
+import GoogleLogin from 'react-google-login';
 import Overlay from '../Overlay';
 import ErrorMessage from '../ErrorMessage';
 
@@ -12,6 +13,10 @@ function BaseForm(props){
         case 'REGISTER_REQUEST': case 'LOGIN_REQUEST': index = 0; break;
         case 'REGISTER_SUCCESS':case 'LOGIN_SUCCESS': index = 1; break;
         default: index = -1;
+    }
+
+    function responseGoogle(res){
+        console.log(res);
     }
 
     return (
@@ -36,6 +41,15 @@ function BaseForm(props){
                     }}
                 </Formik>
                 {after ? after:null}
+                <div class={styles.alternative}>
+                    <GoogleLogin
+                        clientId="1011200848629-n2s30r353k7hvgk9k73bsj20b911omvv.apps.googleusercontent.com"
+                        buttonText="Sign in with Google"
+                        onSuccess={responseGoogle}
+                        onFailure={responseGoogle}
+                        cookiePolicy={'single_host_origin'}
+                    />
+                </div>
             </Overlay>
         </div>
     );

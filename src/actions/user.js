@@ -26,8 +26,24 @@ export function loginRequest(username, password, setSubmitting, setErrors){
 	return { type: LOGIN_REQUEST, username, password, setSubmitting, setErrors };
 }
 
+export function loginSuccess(){
+	return { type: LOGIN_SUCCESS };
+}
+
+export function loginFailure(error){
+	return { type: LOGIN_FAILURE, error };
+}
+
 export function registerRequest(username, email, password, setSubmitting, setErrors, goToLoginPage){
 	return { type: REGISTER_REQUEST, username, email, password, setSubmitting, setErrors, goToLoginPage };
+}
+
+export function registerSuccess(){
+	return { type: REGISTER_SUCCESS };
+}
+
+export function registerFailure(error){
+	return { type: REGISTER_FAILURE, error };
 }
 
 export function logout(){
@@ -38,8 +54,16 @@ export function authenticateRequest(token){
 	return { type: AUTHENTICATE_REQUEST, token };
 }
 
+export function authenticateSuccess(user, verified, token){
+	return { type: AUTHENTICATE_SUCCESS, user, verified, token };
+}
+
 export function authenticateFailure(){
 	return { type: AUTHENTICATE_FAILURE };
+}
+
+export function clearState(){
+	return { type: CLEAR_STATE };
 }
 
 export function verifyRequest(verificationCode){
