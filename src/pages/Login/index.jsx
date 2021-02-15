@@ -2,10 +2,11 @@ import React from 'react';
 import styles from '../../components/Forms/common.module.css';
 import BaseForm from '../../components/Forms/BaseForm';
 import Button from '../../components/Forms/Button';
-import { withRouter, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { loginRequest } from '../../actions/user';
 import InputText from '../../components/Forms/InputText';
+import GoogleLoginButton from '../../components/GoogleLoginButton';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { loginRequest, loginWithGoogleRequest } from '../../actions/session';
 
 function Login(props){
     const handleSubmit = (values, { setSubmitting, setErrors })=>{
@@ -23,13 +24,24 @@ function Login(props){
         return errors;
     }
 
+    const onGoogleResponse = (response)=>{
+        props.loginWithGoogleRequest(response.getAuthResponse().id_token);
+    }
+
+    let after = (
+        <>
+            <Link className={styles.link} to={'/signup'}>Create an account</Link>
+            <GoogleLoginButton buttonText={"Sign in with Google"} onResponse={onGoogleResponse}/>
+        </>
+    )
+    
     return (
         <BaseForm
             initialValues={{ username: '', password: '', repeatPassword: '', '*': '' }}
             validate={validateForm}
             onSubmit={handleSubmit}
             state={props.user.currentState}
-            after={<Link className={styles.link} to={'/signup'}>Create an account</Link>}
+            after={after}
         >
             {({ isSubmitting, errors, values })=>{
                 return (
@@ -52,10 +64,13 @@ const mapDispatchToProps = dispatch => {
     return {
         loginRequest: (username, password, setSubmitting, setErrors) => {
             dispatch(loginRequest(username, password, setSubmitting, setErrors));
+        },
+        loginWithGoogleRequest: (idToken) => {
+            dispatch(loginWithGoogleRequest(idToken));
         }
     };
 }
 
 const ConnectedLogin = connect(mapStateToProps, mapDispatchToProps)(Login);
 
-export default withRouter(ConnectedLogin);
+export default ConnectedLogin;

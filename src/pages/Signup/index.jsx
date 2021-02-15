@@ -2,10 +2,11 @@ import React from 'react';
 import styles from '../../components/Forms/common.module.css';
 import BaseForm from '../../components/Forms/BaseForm';
 import Button from '../../components/Forms/Button';
-import { withRouter, Link, useHistory } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { registerRequest } from '../../actions/user';
 import InputText from '../../components/Forms/InputText';
+import GoogleLoginButton from '../../components/GoogleLoginButton';
+import { Link, useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { registerRequest, loginWithGoogleRequest } from '../../actions/session';
 
 function Signup(props){
     let history = useHistory();
@@ -40,13 +41,24 @@ function Signup(props){
         return errors;
     }
 
+    const onGoogleResponse = (response)=>{
+        props.loginWithGoogleRequest(response.getAuthResponse().id_token);
+    }
+
+    let after = (
+        <>
+            <Link className={styles.link} to={'/login'}>Already have an account? Log in</Link>
+            <GoogleLoginButton buttonText={"Sign up with Google"} onResponse={onGoogleResponse}/>
+        </>
+    )
+
     return (
         <BaseForm
             initialValues={{ username: '', email: '', repeatEmail: '', password: '', repeatPassword: '' }}
             validate={validateForm}
             onSubmit={handleSubmit}
             state={props.user.currentState}
-            after={<Link className={styles.link} to={'/login'}>Already have an account? Log in</Link>}
+            after={after}
         >
             {({ isSubmitting, errors, values })=>{
                 return (
@@ -72,10 +84,13 @@ const mapDispatchToProps = dispatch => {
     return {
         registerRequest: (username, email, password, setSubmitting, setErrors, goToLoginPage) => {
             dispatch(registerRequest(username, email, password, setSubmitting, setErrors, goToLoginPage));
+        },
+        loginWithGoogleRequest: (idToken) => {
+            dispatch(loginWithGoogleRequest(idToken));
         }
     };
 }
 
 const ConnectedSignup = connect(mapStateToProps, mapDispatchToProps)(Signup);
 
-export default withRouter(ConnectedSignup);
+export default ConnectedSignup;

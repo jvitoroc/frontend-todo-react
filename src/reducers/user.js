@@ -1,11 +1,4 @@
 import {
-	LOGIN_REQUEST,
-	LOGIN_SUCCESS,
-	LOGIN_FAILURE,
-	REGISTER_REQUEST,
-	REGISTER_SUCCESS,
-	REGISTER_FAILURE,
-	LOGOUT,
 	AUTHENTICATE_REQUEST,
 	AUTHENTICATE_SUCCESS,
 	AUTHENTICATE_FAILURE,
@@ -14,9 +7,20 @@ import {
 	VERIFY_SUCCESS,
 	VERIFY_REQUEST,
 	VERIFY_FAILURE,
-	RESEND_VERIFICATION_CODE_REQUEST,
-	RESEND_VERIFICATION_CODE_RESPONSE
+	SEND_VERIFICATION_CODE_REQUEST,
+	SEND_VERIFICATION_CODE_RESPONSE
 } from '../actions/user'
+
+import {
+	LOGIN_REQUEST,
+	LOGIN_SUCCESS,
+	LOGIN_FAILURE,
+	LOGIN_WITH_GOOGLE_REQUEST,
+	REGISTER_REQUEST,
+	REGISTER_SUCCESS,
+	REGISTER_FAILURE,
+	LOGOUT,
+} from '../actions/session'
 
 function user(state = {authenticated: false, verified: true}, action) {
     switch (action.type) {
@@ -30,13 +34,13 @@ function user(state = {authenticated: false, verified: true}, action) {
 		case LOGIN_REQUEST:
 			return {
 				...state,
-				currentState: 'LOGIN_REQUEST'
+				currentState: LOGIN_REQUEST
 			}
 		case LOGIN_SUCCESS:
 			return {
 				...state,
 				token: action.token,
-				currentState: 'LOGIN_SUCCESS'
+				currentState: LOGIN_SUCCESS
 			}
 		case LOGIN_FAILURE:
 			return {
@@ -44,22 +48,27 @@ function user(state = {authenticated: false, verified: true}, action) {
 				user: null,
 				authenticated: false,
 				token: null,
-				currentState: 'LOGIN_FAILURE'
+				currentState: LOGIN_FAILURE
+			}
+		case LOGIN_WITH_GOOGLE_REQUEST:
+			return {
+				...state,
+				currentState: LOGIN_WITH_GOOGLE_REQUEST
 			}
 		case REGISTER_REQUEST:
 			return {
 				...state,
-				currentState: 'REGISTER_REQUEST'
+				currentState: REGISTER_REQUEST
 			}
 		case REGISTER_SUCCESS:
 			return {
 				...state,
-				currentState: 'REGISTER_SUCCESS'
+				currentState: REGISTER_SUCCESS
 			}
 		case REGISTER_FAILURE:
 			return {
 				...state,
-				currentState: 'REGISTER_FAILURE'
+				currentState: REGISTER_FAILURE
 			}
 		case LOGOUT:
 			localStorage.removeItem('token');
@@ -68,12 +77,12 @@ function user(state = {authenticated: false, verified: true}, action) {
 				user: null,
 				authenticated: false,
 				token: null,
-				currentState: 'LOGOUT'
+				currentState: LOGOUT
 			}
 		case AUTHENTICATE_REQUEST:
 			return {
 				...state,
-				currentState: 'AUTHENTICATE_REQUEST'
+				currentState: AUTHENTICATE_REQUEST
 			}
 		case AUTHENTICATE_SUCCESS:
 			return {
@@ -82,7 +91,7 @@ function user(state = {authenticated: false, verified: true}, action) {
 				authenticated: true,
 				verified: action.verified,
 				token: action.token,
-				currentState: 'AUTHENTICATE_SUCCESS'
+				currentState: AUTHENTICATE_SUCCESS
 			}
 		case AUTHENTICATE_FAILURE:
 			return {
@@ -90,34 +99,34 @@ function user(state = {authenticated: false, verified: true}, action) {
 				user: null,
 				authenticated: false,
 				token: null,
-				currentState: 'AUTHENTICATE_FAILURE'
+				currentState: AUTHENTICATE_FAILURE
 			}
 		case VERIFY_REQUEST:
 			return {
 				...state,
-				currentState: 'VERIFY_REQUEST'
+				currentState: VERIFY_REQUEST
 			}
 		case VERIFY_SUCCESS:
 			return {
 				...state,
 				verified: true,
-				currentState: 'VERIFY_SUCCESS'
+				currentState: VERIFY_SUCCESS
 			}
 		case VERIFY_FAILURE:
 			return {
 				...state,
 				verifyError: action.error,
-				currentState: 'VERIFY_FAILURE'
+				currentState: VERIFY_FAILURE
 			}
-		case RESEND_VERIFICATION_CODE_REQUEST:
+		case SEND_VERIFICATION_CODE_REQUEST:
 			return {
 				...state,
-				currentState: 'RESEND_VERIFICATION_CODE_REQUEST'
+				currentState: SEND_VERIFICATION_CODE_REQUEST
 			}
-		case RESEND_VERIFICATION_CODE_RESPONSE:
+		case SEND_VERIFICATION_CODE_RESPONSE:
 			return {
 				...state,
-				currentState: 'RESEND_VERIFICATION_CODE_RESPONSE'
+				currentState: SEND_VERIFICATION_CODE_RESPONSE
 			}
 		case CLEAR_STATE:
 			return {

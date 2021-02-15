@@ -10,7 +10,6 @@ function PopupMenuItem(props){
     
     return (
         <div className={styles.PopupMenuItem} onClick={onClick}>
-            {/* <div className={classes['icon']}>{props.icon}</div> */}
             <div>{props.label}</div>
         </div>
     );

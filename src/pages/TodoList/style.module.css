@@ -35,6 +35,30 @@
     transition: 0.4s ease-out;
 }
 
+.TodoList :global(.parent-link-enter){
+    max-height: 0px;
+}
+
+.TodoList :global(.parent-link-enter-active){
+    max-height: 60px;
+}
+
+.TodoList :global(.parent-link-enter-active),
+.TodoList :global(.parent-link-appear-active){
+    transition: 0.2s ease-out;
+}
+
+.TodoList :global(.parent-link-exit){
+    opacity: 1;
+    max-height: 60px;
+}
+
+.TodoList :global(.parent-link-exit-active){
+    opacity: 0;
+    max-height: 0px;
+    transition: 0.1s ease-in;
+}
+
 .content{
     margin: 0 10px 40px 10px;
     box-shadow: 0px 0px 10px rgb(226 226 226);
@@ -42,21 +66,65 @@
     border-radius: 5px;
 }
 
-.todo-list-title{
-    font-size: 2.1875rem;
-    margin-left: 15px;
-    height: 215px;
-    position: relative;
+.parents{
+    font-size: 0.5em;
+    font-weight: 400;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 5px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
-.todo-list-title > div{
-    max-height: 215px;
+.parents li{
+    display: flex;
+    align-items: center;
+}
+
+.parents li > a{
+    font-size: 1rem;
+    padding: 7px;
+    display: block;
+    color: #8d8d8d;
+    text-decoration: none;
+    user-select: none;
+    opacity: 0.6;
+    transition: 0.2s;
+}
+
+.parents li > a:hover{
+    font-weight: 400;
+    opacity: 1;
+}
+
+.parents li:last-child > a{
+    font-weight: 300;
+    font-size: 2.1875rem;
+    user-select: text;
+    opacity: 1;
+}
+
+.parents li > svg{
+    width: 0px;
+    transition: 0.2s;
+}
+
+.parents li:hover svg{
+    width: 18px;
+}
+
+.header{
+    margin-left: 15px;
+    height: 215px;
+}
+
+.header > div{
+    height: 100%;
     max-width: 95%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    position: absolute;
-    bottom: 0;
 }
 
 .menu{
@@ -99,7 +167,6 @@
 .input-new-todo{
     display: flex;
     align-items: center;
-    /* flex-grow: 1; */
     flex-grow: 0;
     flex-shrink: 1;
     flex-basis: 0px;
@@ -118,7 +185,6 @@
     border-left: none;
     border-right: none;
     border-bottom: 2px solid rgb(240, 240, 240);
-    /* border-radius: 5px; */
     font-size: 1rem;
     color: rgb(140, 140, 140);
     margin: 0 10px;

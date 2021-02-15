@@ -4,9 +4,9 @@ import Todo from '../../components/Todo';
 import { createTodo, deleteTodo, updateTodo, selectTodo, toggleEditMode, deleteSelectedTodos, fetchTodos } from '../../actions/todo';
 import { showNotificationRequest } from '../../actions/notification';
 import styles from './style.module.css';
-import {MdAdd, MdDelete, MdArrowUpward} from 'react-icons/md'
-import {TransitionGroup, CSSTransition} from 'react-transition-group';
-import {withRouter} from 'react-router-dom';
+import {MdAdd, MdDelete, MdArrowUpward, MdArrowForward} from 'react-icons/md'
+import {TransitionGroup, CSSTransition, SwitchTransition} from 'react-transition-group';
+import {useHistory, useRouteMatch, Link} from 'react-router-dom';
 import classnames from 'classnames';
 import { useState } from 'react';
 import { useRef } from 'react';
@@ -15,10 +15,13 @@ function TodoList(props){
     const [inputNewTodoActive, setInputNewTodoActive] = useState(false);
     const [inputNewTodoError, setInputNewTodoError] = useState(false);
     const inputNewTodoRef = useRef(null);
-    
+
+    let match = useRouteMatch();
+    let history = useHistory();
+
     useEffect(()=>{
-        props.fetchTodos(props.match.params.parentTodoId);
-    }, [props.match.params.parentTodoId]);
+        props.fetchTodos(match.params.parentTodoId);
+    }, [match.params.parentTodoId]);
 
     useEffect(()=>{
         if(inputNewTodoError)
@@ -57,19 +60,19 @@ function TodoList(props){
             setInputNewTodoError(true);
         }else{
             setInputNewTodoError(false);
-            props.createTodo(props.match.params.parentTodoId, description);
+            props.createTodo(match.params.parentTodoId, description);
             inputNewTodoRef.current.value = "";
         }
     }
 
     const openTodo = (id) => {
-        props.history.push(`/todos/${id}`)
+        history.push(`/todos/${id}`)
     }
 
     const goBack = () => {
-        if(props.match.params.parentTodoId !== undefined){
+        if(match.params.parentTodoId !== undefined){
             let grandParentTodoId = props.todo.grandParentTodoId;
-            props.history.push(`/todos/${grandParentTodoId ? grandParentTodoId:''}`)
+            history.push(`/todos/${grandParentTodoId ? grandParentTodoId:''}`)
         }
     }
 
@@ -81,6 +84,40 @@ function TodoList(props){
             return 'Good afternoon, here are your todos';
         else
             return 'Good evening, here are your todos';
+    }
+    
+    const getTitle = () => {
+        return match.params.parentTodoId ? props.todo.parentTodoDescription:getWelcomeText();
+    }
+
+    const getParentsLink = ()=>{
+        let parents = props.todo.parents.slice()
+        if(props.todo.parentTodoId)
+            parents.push({todoId: null, description: "Go back to the top"})  
+        parents.reverse()
+        parents.push({todoId: props.todo.parentTodoId || null, description: getTitle()});
+        
+        let links = parents.map((e, i) => {
+            let title = (i === parents.length - 1);
+            let opacity = 1.0 - (0.1 * (parents.length - i));
+
+            return (
+                <CSSTransition
+                    key={e.todoId}
+                    timeout={200}
+                    classNames={"parent-link"}
+                >
+                    <li data-id={e.todoId}>
+                        {!title ? <MdArrowForward size={18}/>:null}
+                        {!title ? <Link style={{opacity: opacity}} to={e.todoId ? `/todos/${e.todoId}`:`/todos`}>{e.description}</Link>:<a style={{opacity: opacity}} href="#">{e.description}</a>}
+                    </li>
+                </CSSTransition>
+            )
+        });
+
+        return (
+            <TransitionGroup className={styles.parents}>{links}</TransitionGroup>
+        )
     }
     
     let todos = props.todo.data.map((e) => {
@@ -105,32 +142,18 @@ function TodoList(props){
     );
 
     let deleteButtonClasses = classnames(styles['action-button'], styles['delete-action-button'], !props.todo.allowDeletion ? styles['disabled']:'')
-    let goBackClasses = classnames(styles['action-button'], props.match.params.parentTodoId === undefined ? styles['disabled']:'');
+    let goBackClasses = classnames(styles['action-button'], match.params.parentTodoId === undefined ? styles['disabled']:'');
     let inputNewTodoClasses = classnames(
         styles['input-new-todo'],
         inputNewTodoActive === true ? styles['active']:'',
         inputNewTodoError === true ? styles['error']:''
     );
 
-    let toBeRendered = null;
-    
-    if(props.todo.fetched){
-        toBeRendered = (
-            <TransitionGroup appear>    
-                {todos}
-            </TransitionGroup>
-        );
-    }
-
-    let title = props.match.params.parentTodoId ? props.todo.parentTodoDescription:getWelcomeText();
-
     return (
         <div className={styles.TodoList}>
             <div className={styles.content}>
-                <div className={styles['todo-list-title']}>
-                    <div title={title}>
-                        {title}
-                    </div>
+                <div className={styles.header}>
+                    {getParentsLink()}
                 </div>
                 <div className={styles.menu}>
                     <div className={styles.actions}>
@@ -148,7 +171,11 @@ function TodoList(props){
                         </div>
                     </div>
                 </div>
-                {toBeRendered}
+                <div>
+                    <TransitionGroup appear>    
+                        {todos}
+                    </TransitionGroup>
+                </div>
             </div>
         </div>
     );
@@ -192,4 +219,4 @@ const mapDispatchToProps = dispatch => {
 
 const ConnectedTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList);
  
-export default withRouter(ConnectedTodoList);
+export default ConnectedTodoList;

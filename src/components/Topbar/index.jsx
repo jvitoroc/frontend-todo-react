@@ -1,8 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
-import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { userActions, logout } from '../../actions/user';
+import { logout } from '../../actions/session';
 import styles from './style.module.css'
 
 function Topbar(props){
@@ -11,17 +10,14 @@ function Topbar(props){
     }
 
     let items = []
-    let pathname = props.location.pathname;
 
     if(props.authenticated){
         items.push(<div key={1} className={styles.text}>Logged in as <span className={styles.bold}>{props.user.username}</span></div>);
         items.push(<button key={2} className={classnames(styles.button, styles.text)} onClick={handleLogout} href="#">Logout</button>);
     }
-    // else if(pathname === '/login'){
-    //     items.push(<Link key={3} className={classnames(styles.button, styles.text)} to='/signup'>Sign up</Link>);
-    // }else if(pathname === '/signup'){
-    //     items.push(<Link key={4} className={classnames(styles.button, styles.text)} to='/login'>Log in</Link>);
-    // } 
+
+    if(items.length === 0)
+        return null;
 
     return (
         <div className={styles.Topbar}>
@@ -44,4 +40,4 @@ const mapDispatchToProps = dispatch => {
 
 const ConnectedTopbar = connect(mapStateToProps, mapDispatchToProps)(Topbar);
  
-export default withRouter(ConnectedTopbar);
+export default ConnectedTopbar;

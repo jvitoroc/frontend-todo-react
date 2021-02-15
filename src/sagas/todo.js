@@ -58,7 +58,7 @@ function deleteSelectedTodos(ids) {
             }
         }
 
-        handleFetchRequest(fetch(`${API_URL}/todo/`, init), resolve, reject);
+        handleFetchRequest(fetch(`${API_URL}/todo`, init), resolve, reject);
     });
 }
 
@@ -69,7 +69,7 @@ function fetchTodos(parentTodoId) {
             headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
         }
     
-        handleFetchRequest(fetch(parentTodoId ? `${API_URL}/todo/${parentTodoId}` : `${API_URL}/todo/`, init), resolve, reject);
+        handleFetchRequest(fetch(parentTodoId ? `${API_URL}/todo/${parentTodoId}?parents-count=3` : `${API_URL}/todo`, init), resolve, reject);
     });
 }
 
@@ -79,16 +79,18 @@ function* invalidate(){
 }
 
 function receiveTodos(parentTodoId, json) {
-	let grandParentTodoId, parentTodoDescription;
+	let grandParentTodoId, parentTodoDescription, parents = [];
 
 	if(json.data.todo){
 		parentTodoDescription = json.data.todo.description;
-		if(json.data.parent)
-			grandParentTodoId = json.data.parent.todoId;
+        parents = json.data.parents;
+        if(parents && parents.length > 0)
+            grandParentTodoId = parents[0].todoId
 	}
 
 	return {
 		todos: json.data.children.map((todo) => Object.assign({editingDescription: false}, todo)),
+        parents,
 		parentTodoId,
 		grandParentTodoId,
 		parentTodoDescription
@@ -163,6 +165,7 @@ function* onFetchTodos({parentTodoId}) {
     }catch(error){
         let handled = yield tryHandleVerificationError(error);
         if(!handled){
+            console.log(error)
             yield put(showNotificationRequest('An error ocurred while trying to fetch some todos:', error.detail, 'error'));
         }
     }

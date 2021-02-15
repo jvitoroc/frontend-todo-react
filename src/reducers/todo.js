@@ -9,6 +9,7 @@ function todo(state = {
 	allowDeletion: false,
 	isFetching: false,
 	fetched: false,
+	parents: [],
 	parentTodoDescription: null,
 	parentTodoId: undefined,
     data: []
@@ -55,6 +56,7 @@ function todo(state = {
 				allowDeletion: false,
 				isFetching: false,
 				fetched: true,
+				parents: action.parents,
 				parentTodoId: action.parentTodoId,
 				grandParentTodoId: action.grandParentTodoId,
 				parentTodoDescription: action.parentTodoDescription,

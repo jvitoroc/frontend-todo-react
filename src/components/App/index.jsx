@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactLoading from 'react-loading';
-import {Redirect, useLocation, withRouter} from 'react-router-dom'
+import {Redirect, useLocation, useRouteMatch} from 'react-router-dom'
 import {Route, Switch} from 'react-router-dom';
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {connect} from 'react-redux'
@@ -63,6 +63,13 @@ function App(props){
             props.authenticateFailure();
         }
     }, []);
+    
+    const getTransitionKey = ()=>{
+        let pathname = location.pathname;
+        if(pathname.startsWith("/todos"))
+            return "/todos"
+        return pathname
+    }
 
     if(props.currentState === AUTHENTICATE_REQUEST){
         return <LoadingIndicator/>
@@ -83,7 +90,7 @@ function App(props){
                         onEnter={()=>{document.body.style.overflow = 'hidden'}}
                         onEntered={(isAppearing)=>{if(isAppearing) document.body.style.overflow = 'auto'}}
                         onExited={()=>{document.body.style.overflow = 'auto'}}
-                        key={props.location.key}
+                        key={getTransitionKey()}
                         classNames="transition"
                         timeout={300}
                     >
@@ -120,7 +127,7 @@ function App(props){
                             >
                                 {Verification}
                             </ProtectedRoute>
-                            {/* <Redirect to="/404"/> */}
+                            <Redirect to="/todos"/>
                         </Switch>
                     </CSSTransition>
                 </TransitionGroup>
@@ -146,4 +153,4 @@ const mapDispatchToProps = dispatch => {
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
  
-export default withRouter(ConnectedApp);
+export default ConnectedApp;

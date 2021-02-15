@@ -8,10 +8,13 @@ input:-webkit-autofill:active  {
 :global(#root),
 .App,
 .page,
-.pages-wrapper,
-.pages-wrapper > div,
 body{
     height: 100%;
+}
+
+.pages-wrapper,
+.pages-wrapper > div{
+    height: calc(100% - 50px);
 }
 
 body{

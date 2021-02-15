@@ -46,7 +46,6 @@ function CheckIcon({checked, onClick}){
 
 function Todo(props){
     const contextMenuRef = useRef(null);
-    
     const textRef = useRef(null);
 
     useEffect(()=>{
@@ -90,8 +89,8 @@ function Todo(props){
                 <PopupMenu
                     element={contextMenuRef.current}
                     items={[
-                        {icon: <MdEdit/>, label: 'Edit', onClick: onEdit},
-                        {icon: <MdDelete/>, label: 'Delete', onClick: props.onDelete}
+                        {label: 'Edit', onClick: onEdit},
+                        {label: 'Delete', onClick: props.onDelete}
                     ]}
                 />
                 <CheckIcon onClick={onComplete} checked={props.completed}/>

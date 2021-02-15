@@ -1,0 +1,19 @@
+.Card{
+    font-weight: 300;
+    font-size: 0.875rem;
+    width: 250px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgb(226 226 226);
+    background-color: white;
+    z-index: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.logo{
+    background-image: url('../../img/logo.jpg');
+    background-size: 200%;
+    background-position: center;
+    height: 200px;
+}
