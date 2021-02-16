@@ -7,7 +7,7 @@ import ErrorMessage from '../ErrorMessage';
 import {REGISTER_REQUEST, REGISTER_SUCCESS, LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_WITH_GOOGLE_REQUEST} from '../../../actions/session';
 
 function BaseForm(props){
-    let {after, children, state, initialValues, validate, onSubmit} = {...props};
+    let {validateOnChange, validateOnBlur, after, children, state, initialValues, validate, onSubmit} = {...props};
     let index;
     
     switch(state){
@@ -31,6 +31,8 @@ function BaseForm(props){
             >
                 <Card>
                     <Formik
+                        validateOnChange={validateOnChange}
+                        validateOnBlur={validateOnBlur}
                         initialValues={initialValues}
                         validate={validate}
                         onSubmit={onSubmit}

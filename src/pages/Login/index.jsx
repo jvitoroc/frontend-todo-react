@@ -37,6 +37,8 @@ function Login(props){
     
     return (
         <BaseForm
+            validateOnChange={false}
+            validateOnBlur={true}
             initialValues={{ username: '', password: '', repeatPassword: '', '*': '' }}
             validate={validateForm}
             onSubmit={handleSubmit}

@@ -5,7 +5,7 @@ import { createTodo, deleteTodo, updateTodo, selectTodo, toggleEditMode, deleteS
 import { showNotificationRequest } from '../../actions/notification';
 import styles from './style.module.css';
 import {MdAdd, MdDelete, MdArrowUpward, MdArrowForward} from 'react-icons/md'
-import {TransitionGroup, CSSTransition, SwitchTransition} from 'react-transition-group';
+import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {useHistory, useRouteMatch, Link} from 'react-router-dom';
 import classnames from 'classnames';
 import { useState } from 'react';
@@ -99,7 +99,7 @@ function TodoList(props){
         
         let links = parents.map((e, i) => {
             let title = (i === parents.length - 1);
-            let opacity = 1.0 - (0.1 * (parents.length - i));
+            let opacity = 1.0 - (0.07 * (parents.length - i));
 
             return (
                 <CSSTransition
@@ -219,4 +219,4 @@ const mapDispatchToProps = dispatch => {
 
 const ConnectedTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList);
  
-export default ConnectedTodoList;
+export default ConnectedTodoList

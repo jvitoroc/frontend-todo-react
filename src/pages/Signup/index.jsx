@@ -33,10 +33,10 @@ function Signup(props){
         else if (values.password !== values.repeatPassword)
             errors.repeatPassword = "Passwords don't match.";
 
-        if (!values.repeatEmail)
-            errors.repeatEmail = 'Confirm your email.';
-        else if (values.email !== values.repeatEmail)
-            errors.repeatEmail = "Emails don't match.";
+        // if (!values.repeatEmail)
+        //     errors.repeatEmail = 'Confirm your email.';
+        // else if (values.email !== values.repeatEmail)
+        //     errors.repeatEmail = "Emails don't match.";
 
         return errors;
     }
@@ -54,6 +54,8 @@ function Signup(props){
 
     return (
         <BaseForm
+            validateOnChange={false}
+            validateOnBlur={false}
             initialValues={{ username: '', email: '', repeatEmail: '', password: '', repeatPassword: '' }}
             validate={validateForm}
             onSubmit={handleSubmit}
@@ -65,7 +67,7 @@ function Signup(props){
                     <>
                         <InputText name={'username'} label={'Username'} value={values.username} error={errors.username}/>
                         <InputText name={'email'} label={'Email'} value={values.email} error={errors.email}/>
-                        <InputText name={'repeatEmail'} label={'Repeat email'} value={values.repeatEmail} error={errors.repeatEmail}/>
+                        {/* <InputText name={'repeatEmail'} label={'Repeat email'} value={values.repeatEmail} error={errors.repeatEmail}/> */}
                         <InputText name={'password'} label={'Password'}  value={values.password} error={errors.password} password/>
                         <InputText name={'repeatPassword'} label={'Repeat password'}  value={values.repeatPassword} error={errors.repeatPassword} password/>
                         <Button disabled={isSubmitting} type="submit" value="Sign up"/>

@@ -6,6 +6,8 @@
     flex-direction: column;
     font-weight: 300;
     font-size: 0.875rem;
+    box-sizing: border-box;
+    padding-bottom: 10px;
 }
 
 .after-wrapper{

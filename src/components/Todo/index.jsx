@@ -5,8 +5,6 @@ import styles from './style.module.css';
 import classnames from 'classnames';
 import PopupMenu from '../PopupMenu';
 import {usePrevious, setEndOfContenteditable} from '../../utils.js';
-import {MdEdit, MdDelete} from 'react-icons/md'
-
 
 function CheckIcon({checked, onClick}){
     const [hovered, setHovered] = useState(false);

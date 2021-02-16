@@ -3,7 +3,15 @@ import {
 	TOGGLE_EDIT_MODE,
 	FETCH_TODOS,
 	RECEIVE_TODOS
-} from '../actions/todo'
+} from '../actions/todo';
+
+import {
+	AUTHENTICATE_SUCCESS
+} from '../actions/user';
+
+import {
+	LOGOUT
+} from '../actions/session';
 
 function todo(state = {
 	allowDeletion: false,
@@ -15,6 +23,18 @@ function todo(state = {
     data: []
 }, action) {
     switch (action.type) {
+		case AUTHENTICATE_SUCCESS:
+		case LOGOUT:
+			return {
+				...state,
+				allowDeletion: false,
+				isFetching: false,
+				fetched: false,
+				parents: [],
+				parentTodoDescription: null,
+				parentTodoId: undefined,
+				data: []
+			}
 		case SELECT_TODO:
 			let newTodos = state.data.map((todo) => {
 				if (todo.todoId === action.todoId) {

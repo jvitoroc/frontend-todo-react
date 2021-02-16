@@ -8,13 +8,6 @@
     color: rgb(128, 128, 128);
 }
 
-.logo{
-    background-image: url('../../img/logo.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 200px;
-}
-
 .title{
     font-size: 1.3em;
     font-weight: 500;
